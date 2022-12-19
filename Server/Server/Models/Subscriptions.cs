@@ -1,14 +1,17 @@
-﻿namespace Server.Models
+﻿using System.ComponentModel.DataAnnotations;
+namespace Server.Models
 {
     public class Subscriptions
     {
-        public int SubscriptionsId { get; set; }
-        public int FirstUserId { get; set; }
+        [Key]
+        public int Id { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
         public int SecondUserId { get; set; }
-        public Subscriptions(int subscriptionsId, int firstUserId, int secondUserId)
+        public User SecondUser { get; set; }
+        public Subscriptions(int userId, int secondUserId)
         {
-            SubscriptionsId = subscriptionsId;
-            FirstUserId = firstUserId;
+            UserId = userId;
             SecondUserId = secondUserId;
         }
     }

@@ -1,13 +1,16 @@
-﻿namespace Server.Models
-{
+﻿using Microsoft.EntityFrameworkCore;
+namespace Server.Models
+{   
     public class Like
     {
-        public int LikeId { get; set; }
+        public int Id { get; set; }
         public int UserId { get; set; }
+        public User User { get; set; }
         public int PostId { get; set; }
-        public Like(int likeId, int postId, int userId)
+        public Post Post { get; set; }
+        public Like(int id, int postId, int userId)
         {
-            LikeId = likeId;
+            Id = id;
             PostId = postId;
             UserId = userId;
         }

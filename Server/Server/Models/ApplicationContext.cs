@@ -20,5 +20,19 @@ namespace Server.Models
             optionsBuilder.UseMySql("server=localhost;user=student;password=P@ssw0rd;database=stogramm;",
                 ServerVersion.AutoDetect("server=localhost;user=student;password=P@ssw0rd;database=stogramm;"));
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Subscriptions>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.Subber)
+                .HasForeignKey(x => x.UserId);
+
+
+            modelBuilder.Entity<Subscriptions>()
+                .HasOne(x => x.SecondUser)
+                .WithMany(x => x.Sub)
+                .HasForeignKey(x => x.SecondUserId);
+        }
     }
 }
