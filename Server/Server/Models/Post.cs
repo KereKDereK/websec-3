@@ -15,7 +15,7 @@ namespace Server.Models
         public int LikeCount { get; set; }
         public List<Image> Images { get; set; }
         public List<Like> Likes { get; set; }
-        public List<Post> Posts { get; set; }
+        public List<Comment> Comments { get; set; }
         public Post(int postId, string text, int userId, DateTime date, int likeCount)
         {
             Id = postId;
