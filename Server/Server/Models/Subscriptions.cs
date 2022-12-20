@@ -9,10 +9,5 @@ namespace Server.Models
         public User User { get; set; }
         public int SecondUserId { get; set; }
         public User SecondUser { get; set; }
-        public Subscriptions(int userId, int secondUserId)
-        {
-            UserId = userId;
-            SecondUserId = secondUserId;
-        }
     }
 }

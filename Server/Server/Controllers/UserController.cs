@@ -39,7 +39,7 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        public ActionResult<int> Post([FromBody] User user)
+        public ActionResult<string> Post([FromBody] User user)
         {
 
             try

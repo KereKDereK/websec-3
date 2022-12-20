@@ -31,6 +31,8 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
+                if (post.Likes_Count != 0)
+                    post.Likes_Count = 0;
                 db.Posts.Add(post);
                 try
                 {
@@ -50,8 +52,8 @@ namespace Server.Repositories
             {
                 var post = db.Posts.ToList().Where(x => x.Id == id).SingleOrDefault();
                 post.Text = newPost.Text;
-                post.LikeCount = newPost.LikeCount;
-                post.Date = newPost.Date;
+                post.Likes_Count = newPost.Likes_Count;
+                post.Datetime = newPost.Datetime;
                 try
                 {
                     db.SaveChanges();

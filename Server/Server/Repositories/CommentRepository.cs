@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Server.Repositories
 {
-    public class CommentRepository
+    public class CommentRepository : ICommentRepository
     {
 
         public List<Comment> GetAllComments()
@@ -50,11 +50,11 @@ namespace Server.Repositories
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
                 var comment = db.Comments.ToList().Where(x => x.Id == id).SingleOrDefault();
-                comment.CommentText = newComment.CommentText;
-                comment.DateComment = newComment.DateComment;
+                comment.Text = newComment.Text;
+                comment.Datetime = newComment.Datetime;
                 try
                 {
-                    db.SaveChangesAsync();
+                    db.SaveChanges();
                 }
                 catch (Exception ex)
                 {

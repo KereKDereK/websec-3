@@ -14,14 +14,5 @@ namespace Server.Models
         public List<Like> Likes { get; set; }
         public List<Subscriptions> Subber { get; set; }
         public List<Subscriptions> Sub { get; set; }
-        public User(int id, string userName,string email, string passwordHash, string registrationType)
-        {
-            Id = id;
-            UserName = userName;
-            Email = email;
-            PasswordHash = passwordHash;
-            RegistrationType = registrationType;    
-        }
-
     }
 }

@@ -3,6 +3,10 @@ using Server.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Net.Mail;
 
 namespace Server.Repositories
 {
@@ -29,6 +33,18 @@ namespace Server.Repositories
 
         public int AddUser(User user)
         {
+            try
+            {
+                MailAddress checker = new MailAddress(user.Email);
+            }
+            catch
+            {
+                return -1;
+            }
+            var client_id = "9ad6adf4562c48399e6da3cc61272b92";
+            var client_secret = "09a0e5e772f24177b672822239237660";
+            var url = "https://oauth.yandex.ru/token";
+
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
                 db.Users.Add(user);
@@ -46,6 +62,14 @@ namespace Server.Repositories
 
         public int UpdateUser(int id, User newUser)
         {
+            try
+            {
+                MailAddress checker = new MailAddress(newUser.Email);
+            }
+            catch
+            {
+                return -1;
+            }
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
                 var user = db.Users.ToList().Where(x => x.Id == id).SingleOrDefault();

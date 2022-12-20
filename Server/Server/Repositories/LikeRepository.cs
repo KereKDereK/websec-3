@@ -30,7 +30,13 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
+                var likes = db.Likes.ToList();
+                foreach (Like l in likes)
+                    if (l.UserId == like.UserId && l.PostId == like.PostId)
+                        return -1;
                 db.Likes.Add(like);
+                var change = db.Posts.ToList().Where(p => p.Id == like.PostId).SingleOrDefault();
+                change.Likes_Count = change.Likes_Count + 1;
                 try
                 {
                     db.SaveChanges();

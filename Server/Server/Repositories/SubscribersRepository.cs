@@ -31,6 +31,10 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
+                var subs = db.Subscriptions.ToList();
+                foreach (Subscriptions s in subs)
+                    if (s.UserId == sub.UserId && s.SecondUserId == sub.SecondUserId)
+                        return -1;
                 db.Subscriptions.Add(sub);
                 try
                 {
