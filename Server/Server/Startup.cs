@@ -28,6 +28,7 @@ namespace Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddSingleton<IPostRepository, PostRepository>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

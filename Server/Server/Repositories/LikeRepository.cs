@@ -21,10 +21,8 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var like = db.Likes.ToList().Where(x => x.Id == id);
-                if (like.Count() == 0)
-                    throw new Exception("No element with such ID");
-                return (Like)like;
+                var like = db.Likes.Find(id);
+                return like;
             }
         }
 
@@ -35,7 +33,7 @@ namespace Server.Repositories
                 db.Likes.Add(like);
                 try
                 {
-                    db.SaveChangesAsync();
+                    db.SaveChanges();
                 }
                 catch (Exception ex)
                 {
@@ -49,11 +47,11 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var like = (Like)db.Likes.ToList().Where(x => x.Id == id);
+                var like = db.Likes.ToList().Where(x => x.Id == id).SingleOrDefault();
                 db.Likes.Remove(like);
                 try
                 {
-                    db.SaveChangesAsync();
+                    db.SaveChanges();
                 }
                 catch (Exception ex)
                 {

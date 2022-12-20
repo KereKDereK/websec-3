@@ -23,7 +23,7 @@ namespace Server.Repositories
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
                 var user = db.Users.Find(id);
-                return (User)user;
+                return user;
             }
         }
 
@@ -34,7 +34,7 @@ namespace Server.Repositories
                 db.Users.Add(user);
                 try
                 {
-                    db.SaveChangesAsync();
+                    db.SaveChanges();
                 }
                 catch (Exception ex)
                 {
@@ -48,13 +48,13 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var user = (User)db.Users.ToList().Where(x => x.Id == id);
+                var user = db.Users.ToList().Where(x => x.Id == id).SingleOrDefault();
                 user.UserName = newUser.UserName;
                 user.Email = newUser.Email;
                 user.PasswordHash = newUser.PasswordHash;
                 try
                 {
-                    db.SaveChangesAsync();
+                    db.SaveChanges();
                 }
                 catch (Exception ex)
                 {
@@ -68,11 +68,11 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var user = (User)db.Users.ToList().Where(x => x.Id == id);
+                var user = db.Users.ToList().Where(x => x.Id == id).SingleOrDefault();
                 db.Users.Remove(user);
                 try
                 {
-                    db.SaveChangesAsync();
+                    db.SaveChanges();
                 }
                 catch (Exception ex)
                 {
@@ -86,7 +86,7 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var user = (User)db.Users.Include(x => x.Subber).ToList().Where(x => x.Id == id);
+                var user = db.Users.Include(x => x.Subber).ToList().Where(x => x.Id == id).SingleOrDefault();
                 return user.Subber;
             }
         }
@@ -94,7 +94,7 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var user = (User)db.Users.Include(x => x.Sub).ToList().Where(x => x.Id == id);
+                var user = db.Users.Include(x => x.Sub).ToList().Where(x => x.Id == id).SingleOrDefault();
                 return user.Sub;
             }
         }
