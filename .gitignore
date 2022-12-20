@@ -3,3 +3,7 @@
 ################################################################################
 
 /Server/.vs/Server
+/Server/Server/bin/Debug/net5.0
+/.vs/websec-3/v17
+/.vs
+/Server/Server/obj
