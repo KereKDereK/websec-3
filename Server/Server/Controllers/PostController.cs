@@ -6,22 +6,23 @@ using System.Collections.Generic;
 using Server.Models;
 using System;
 
+
 namespace Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class PostController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
-        public UserController(IUserRepository userRepository)
+        private readonly IPostRepository _postRepository;
+        public PostController(IPostRepository postRepository)
         {
-            _userRepository = userRepository;
+            _postRepository = postRepository;
         }
         [HttpGet]
-        public ActionResult<List<User>> Get() => _userRepository.GetAllUsers();
+        public ActionResult<List<Post>> Get() => _postRepository.GetAllPosts();
 
         [HttpGet("{id:int}")]
-        public ActionResult<User> Get(int id)
+        public ActionResult<Post> Get(int id)
         {
             try
             {
@@ -29,8 +30,8 @@ namespace Server.Controllers
                 {
                     return NotFound();
                 }
-                var user = _userRepository.GetUser(id);
-                return user;
+                var post = _postRepository.GetPost(id);
+                return post;
             }
             catch
             {
@@ -39,12 +40,12 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        public ActionResult<string> Post([FromBody] User user)
+        public ActionResult<int> Post([FromBody] Post post)
         {
 
             try
             {
-                return _userRepository.AddUser(user);
+                return _postRepository.AddPost(post);
             }
             catch
             {
@@ -53,12 +54,12 @@ namespace Server.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult<int> Put(int id, [FromBody] User user)
+        public ActionResult<int> Put(int id, [FromBody] Post post)
         {
 
             try
             {
-                return _userRepository.UpdateUser(id, user);
+                return _postRepository.UpdatePost(id, post);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -76,7 +77,7 @@ namespace Server.Controllers
         {
             try
             {
-                return _userRepository.DeleteUser(id);
+                return _postRepository.DeletePost(id);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -87,7 +88,5 @@ namespace Server.Controllers
                 return Problem();
             }
         }
-
-
     }
 }

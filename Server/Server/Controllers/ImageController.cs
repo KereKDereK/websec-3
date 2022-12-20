@@ -10,18 +10,18 @@ namespace Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class ImageController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
-        public UserController(IUserRepository userRepository)
+        private readonly IImageRepository _imageRepository;
+        public ImageController(IImageRepository imageRepository)
         {
-            _userRepository = userRepository;
+            _imageRepository = imageRepository;
         }
         [HttpGet]
-        public ActionResult<List<User>> Get() => _userRepository.GetAllUsers();
+        public ActionResult<List<Image>> Get() => _imageRepository.GetAllImages();
 
         [HttpGet("{id:int}")]
-        public ActionResult<User> Get(int id)
+        public ActionResult<Image> Get(int id)
         {
             try
             {
@@ -29,8 +29,8 @@ namespace Server.Controllers
                 {
                     return NotFound();
                 }
-                var user = _userRepository.GetUser(id);
-                return user;
+                var post = _imageRepository.GetImage(id);
+                return post;
             }
             catch
             {
@@ -39,12 +39,12 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        public ActionResult<string> Post([FromBody] User user)
+        public ActionResult<int> Post([FromBody] Image image)
         {
 
             try
             {
-                return _userRepository.AddUser(user);
+                return _imageRepository.AddImage(image);
             }
             catch
             {
@@ -53,12 +53,12 @@ namespace Server.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult<int> Put(int id, [FromBody] User user)
+        public ActionResult<int> Put(int id, [FromBody] Image image)
         {
 
             try
             {
-                return _userRepository.UpdateUser(id, user);
+                return _imageRepository.UpdateImage(id, image);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -76,7 +76,7 @@ namespace Server.Controllers
         {
             try
             {
-                return _userRepository.DeleteUser(id);
+                return _imageRepository.DeleteImage(id);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -87,7 +87,5 @@ namespace Server.Controllers
                 return Problem();
             }
         }
-
-
     }
 }

@@ -33,6 +33,10 @@ namespace Server.Models
                 .HasOne(x => x.SecondUser)
                 .WithMany(x => x.Sub)
                 .HasForeignKey(x => x.SecondUserId);
+
+            modelBuilder.Entity<Post>()
+                .Property(b => b.Likes_Count)
+                .HasDefaultValue(0);
         }
     }
 }
