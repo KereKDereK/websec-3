@@ -23,10 +23,8 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var comment = db.Comments.ToList().Where(x => x.Id == id);
-                if (comment.Count() == 0)
-                    throw new Exception("No element with such ID");
-                return (Comment)comment;
+                var comment = db.Comments.Find(id);
+                return comment;
             }
         }
 
@@ -37,7 +35,7 @@ namespace Server.Repositories
                 db.Comments.Add(comment);
                 try
                 {
-                    db.SaveChangesAsync();
+                    db.SaveChanges();
                 }
                 catch (Exception ex)
                 {
@@ -51,7 +49,7 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var comment = (Comment)db.Comments.ToList().Where(x => x.Id == id);
+                var comment = db.Comments.ToList().Where(x => x.Id == id).SingleOrDefault();
                 comment.CommentText = newComment.CommentText;
                 comment.DateComment = newComment.DateComment;
                 try
@@ -70,7 +68,7 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var comment = (Comment)db.Comments.ToList().Where(x => x.Id == id);
+                var comment = db.Comments.ToList().Where(x => x.Id == id).SingleOrDefault();
                 db.Comments.Remove(comment);
                 try
                 {

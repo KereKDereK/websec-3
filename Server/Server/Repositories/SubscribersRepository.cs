@@ -22,10 +22,8 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var subs = db.Subscriptions.ToList().Where(x => x.Id == id);
-                if (subs.Count() == 0)
-                    throw new Exception("No element with such ID");
-                return (Subscriptions)subs;
+                var subs = db.Subscriptions.Find(id);
+                return subs;
             }
         }
 
@@ -36,7 +34,7 @@ namespace Server.Repositories
                 db.Subscriptions.Add(sub);
                 try
                 {
-                    db.SaveChangesAsync();
+                    db.SaveChanges();
                 }
                 catch (Exception ex)
                 {
@@ -50,11 +48,11 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var sub = (Subscriptions)db.Subscriptions.ToList().Where(x => x.Id == id);
+                var sub = db.Subscriptions.ToList().Where(x => x.Id == id).SingleOrDefault();
                 db.Subscriptions.Remove(sub);
                 try
                 {
-                    db.SaveChangesAsync();
+                    db.SaveChanges();
                 }
                 catch (Exception ex)
                 {

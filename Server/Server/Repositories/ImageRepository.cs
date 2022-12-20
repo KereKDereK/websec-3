@@ -21,10 +21,8 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var image = db.Images.ToList().Where(x => x.Id == id);
-                if (image.Count() == 0)
-                    throw new Exception("No element with such ID");
-                return (Image)image;
+                var image = db.Images.Find(id);
+                return image;
             }
         }
 
@@ -35,7 +33,7 @@ namespace Server.Repositories
                 db.Images.Add(Image);
                 try
                 {
-                    db.SaveChangesAsync();
+                    db.SaveChanges();
                 }
                 catch (Exception ex)
                 {
@@ -49,12 +47,12 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var image = (Image)db.Images.ToList().Where(x => x.Id == id);
+                var image = db.Images.ToList().Where(x => x.Id == id).SingleOrDefault();
                 image.ImageUrl = newImage.ImageUrl;
                 image.Order = newImage.Order;
                 try
                 {
-                    db.SaveChangesAsync();
+                    db.SaveChanges();
                 }
                 catch (Exception ex)
                 {
@@ -68,11 +66,11 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var image = (Image)db.Images.ToList().Where(x => x.Id == id);
+                var image = db.Images.ToList().Where(x => x.Id == id).SingleOrDefault(); 
                 db.Images.Remove(image);
                 try
                 {
-                    db.SaveChangesAsync();
+                    db.SaveChanges();
                 }
                 catch (Exception ex)
                 {
