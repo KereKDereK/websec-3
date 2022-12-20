@@ -10,18 +10,18 @@ namespace Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class SubscribersController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
-        public UserController(IUserRepository userRepository)
+        private readonly ISubscribersRepository _subscribersRepository;
+        public SubscribersController(ISubscribersRepository subscribersRepository)
         {
-            _userRepository = userRepository;
+            _subscribersRepository = subscribersRepository;
         }
         [HttpGet]
-        public ActionResult<List<User>> Get() => _userRepository.GetAllUsers();
+        public ActionResult<List<Subscriptions>> Get() => _subscribersRepository.GetAllSubsribers();
 
         [HttpGet("{id:int}")]
-        public ActionResult<User> Get(int id)
+        public ActionResult<Subscriptions> Get(int id)
         {
             try
             {
@@ -29,8 +29,8 @@ namespace Server.Controllers
                 {
                     return NotFound();
                 }
-                var user = _userRepository.GetUser(id);
-                return user;
+                var sub = _subscribersRepository.GetSubsriber(id);
+                return sub;
             }
             catch
             {
@@ -39,12 +39,12 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        public ActionResult<string> Post([FromBody] User user)
+        public ActionResult<int> Post([FromBody] Subscriptions subscriptions)
         {
 
             try
             {
-                return _userRepository.AddUser(user);
+                return _subscribersRepository.AddSubsriber(subscriptions);
             }
             catch
             {
@@ -52,23 +52,6 @@ namespace Server.Controllers
             }
         }
 
-        [HttpPut("{id:int}")]
-        public ActionResult<int> Put(int id, [FromBody] User user)
-        {
-
-            try
-            {
-                return _userRepository.UpdateUser(id, user);
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                return BadRequest();
-            }
-            catch
-            {
-                return Problem();
-            }
-        }
 
         [HttpDelete("{id:int}")]
 
@@ -76,7 +59,7 @@ namespace Server.Controllers
         {
             try
             {
-                return _userRepository.DeleteUser(id);
+                return _subscribersRepository.DeleteSubsriber(id);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -87,7 +70,5 @@ namespace Server.Controllers
                 return Problem();
             }
         }
-
-
     }
 }

@@ -6,22 +6,23 @@ using System.Collections.Generic;
 using Server.Models;
 using System;
 
+
 namespace Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class LikeController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
-        public UserController(IUserRepository userRepository)
+        private readonly ILikeRepository _likeRepository;
+        public LikeController(ILikeRepository likeRepository)
         {
-            _userRepository = userRepository;
+            _likeRepository = likeRepository;
         }
         [HttpGet]
-        public ActionResult<List<User>> Get() => _userRepository.GetAllUsers();
+        public ActionResult<List<Like>> Get() => _likeRepository.GetAllLikes();
 
         [HttpGet("{id:int}")]
-        public ActionResult<User> Get(int id)
+        public ActionResult<Like> Get(int id)
         {
             try
             {
@@ -29,8 +30,8 @@ namespace Server.Controllers
                 {
                     return NotFound();
                 }
-                var user = _userRepository.GetUser(id);
-                return user;
+                var like = _likeRepository.GetLike(id);
+                return like;
             }
             catch
             {
@@ -39,12 +40,12 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        public ActionResult<string> Post([FromBody] User user)
+        public ActionResult<int> Post([FromBody] Like like)
         {
 
             try
             {
-                return _userRepository.AddUser(user);
+                return _likeRepository.AddLike(like);
             }
             catch
             {
@@ -52,23 +53,6 @@ namespace Server.Controllers
             }
         }
 
-        [HttpPut("{id:int}")]
-        public ActionResult<int> Put(int id, [FromBody] User user)
-        {
-
-            try
-            {
-                return _userRepository.UpdateUser(id, user);
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                return BadRequest();
-            }
-            catch
-            {
-                return Problem();
-            }
-        }
 
         [HttpDelete("{id:int}")]
 
@@ -76,7 +60,7 @@ namespace Server.Controllers
         {
             try
             {
-                return _userRepository.DeleteUser(id);
+                return _likeRepository.DeleteLike(id);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -87,7 +71,5 @@ namespace Server.Controllers
                 return Problem();
             }
         }
-
-
     }
 }

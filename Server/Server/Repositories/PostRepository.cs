@@ -22,10 +22,8 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var post = db.Posts.ToList().Where(x => x.Id == id);
-                if (post.Count() == 0)
-                    throw new Exception("No element with such ID");
-                return (Post)post;
+                var post = db.Posts.Find(id);
+                return post;
             }
         }
 
@@ -33,10 +31,12 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
+                if (post.Likes_Count != 0)
+                    post.Likes_Count = 0;
                 db.Posts.Add(post);
                 try
                 {
-                    db.SaveChangesAsync();
+                    db.SaveChanges();
                 }
                 catch (Exception ex)
                 {
@@ -50,13 +50,13 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var post = (Post)db.Posts.ToList().Where(x => x.Id == id);
+                var post = db.Posts.ToList().Where(x => x.Id == id).SingleOrDefault();
                 post.Text = newPost.Text;
-                post.LikeCount = newPost.LikeCount;
-                post.Date = newPost.Date;
+                post.Likes_Count = newPost.Likes_Count;
+                post.Datetime = newPost.Datetime;
                 try
                 {
-                    db.SaveChangesAsync();
+                    db.SaveChanges();
                 }
                 catch (Exception ex)
                 {
@@ -70,11 +70,11 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var post = (Post)db.Posts.ToList().Where(x => x.Id == id);
+                var post = db.Posts.ToList().Where(x => x.Id == id).SingleOrDefault();
                 db.Posts.Remove(post);
                 try
                 {
-                    db.SaveChangesAsync();
+                    db.SaveChanges();
                 }
                 catch (Exception ex)
                 {
@@ -87,7 +87,7 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var post = (Post)db.Posts.Include(x => x.Likes).ToList().Where(x => x.Id == id);
+                var post = db.Posts.Include(x => x.Likes).ToList().Where(x => x.Id == id).SingleOrDefault();
                 return post.Likes.Count;
             }
         }
@@ -96,7 +96,7 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var post = (Post)db.Posts.Include(x => x.Comments).ToList().Where(x => x.Id == id);
+                var post = db.Posts.Include(x => x.Comments).ToList().Where(x => x.Id == id).SingleOrDefault();
                 return post.Comments;
             }
         }

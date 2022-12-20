@@ -10,18 +10,18 @@ namespace Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class CommentController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
-        public UserController(IUserRepository userRepository)
+        private readonly ICommentRepository _commentRepository;
+        public CommentController(ICommentRepository commentRepository)
         {
-            _userRepository = userRepository;
+            _commentRepository = commentRepository;
         }
         [HttpGet]
-        public ActionResult<List<User>> Get() => _userRepository.GetAllUsers();
+        public ActionResult<List<Comment>> Get() => _commentRepository.GetAllComments();
 
         [HttpGet("{id:int}")]
-        public ActionResult<User> Get(int id)
+        public ActionResult<Comment> Get(int id)
         {
             try
             {
@@ -29,8 +29,8 @@ namespace Server.Controllers
                 {
                     return NotFound();
                 }
-                var user = _userRepository.GetUser(id);
-                return user;
+                var comment = _commentRepository.GetComment(id);
+                return comment;
             }
             catch
             {
@@ -39,12 +39,12 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        public ActionResult<string> Post([FromBody] User user)
+        public ActionResult<int> Post([FromBody] Comment comment)
         {
 
             try
             {
-                return _userRepository.AddUser(user);
+                return _commentRepository.AddComment(comment);
             }
             catch
             {
@@ -53,12 +53,12 @@ namespace Server.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult<int> Put(int id, [FromBody] User user)
+        public ActionResult<int> Put(int id, [FromBody] Comment comment)
         {
 
             try
             {
-                return _userRepository.UpdateUser(id, user);
+                return _commentRepository.UpdateComment(id, comment);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -76,7 +76,7 @@ namespace Server.Controllers
         {
             try
             {
-                return _userRepository.DeleteUser(id);
+                return _commentRepository.DeleteComment(id);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -87,7 +87,5 @@ namespace Server.Controllers
                 return Problem();
             }
         }
-
-
     }
 }

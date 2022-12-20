@@ -9,20 +9,5 @@ namespace Server.Models
         public Post Post { get; set; }
         public string ImageUrl { get; set; }
         public int Order { get; set; }
-
-        public Image(int imageId, int postId, string imageUrl, int order)
-        {
-            Id = imageId;
-            PostId = postId;
-            ImageUrl = imageUrl;
-            Order = order;
-        }
-
-        public Image(int postId, string imageUrl, int order)
-        {
-            PostId = postId;
-            ImageUrl = imageUrl;
-            Order = order;
-        }
     }
 }
