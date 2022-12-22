@@ -4,7 +4,8 @@ import Home from "./pages/Home"
 import Post from "./pages/Post"
 import Subs from "./pages/Subs"
 import User from "./pages/User"
-import { AUTH_ROUTE, FEED_ROUTE, HOME_ROUTE, POST_ROUTE, REG_ROUTE, SUBS_ROUTE, SUB_ROUTE, USER_ROUTE } from "./utils/consts"
+import Wait from "./pages/Wait"
+import { AUTH_ROUTE, FEED_ROUTE, HOME_ROUTE, POST_ROUTE, REG_ROUTE, SUBS_ROUTE, SUB_ROUTE, USER_ROUTE, WAIT_ROUTE } from "./utils/consts"
 
 export const authRoutes = [
     {
@@ -41,5 +42,9 @@ export const publicRoutes = [
     {
         path: HOME_ROUTE,
         Component: Home
+    },
+    {
+        path: WAIT_ROUTE,
+        Component: Wait
     }
 ]

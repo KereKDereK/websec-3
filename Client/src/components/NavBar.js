@@ -4,7 +4,7 @@ import Navbar  from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
 import { useContext } from 'react'
 import { Context } from '../index';
-import { HOME_ROUTE,AUTH_ROUTE, REG_ROUTE } from "../utils/consts";
+import { HOME_ROUTE,AUTH_ROUTE, REG_ROUTE, USER_ROUTE, FEED_ROUTE, SUB_ROUTE } from "../utils/consts";
 import  Button  from "react-bootstrap/Button";
 import {observer} from "mobx-react-lite";
 
@@ -16,7 +16,10 @@ const NavBar = observer( () => {
           <Navbar.Brand href={HOME_ROUTE}>StoGramm</Navbar.Brand>
             {user.isAuth?
               <Nav className="ml-auto" style={{color : 'white'}}>
-                <Button variant={"outline-light"}>XYY</Button>
+                <Button variant={"outline-light"} href={USER_ROUTE}>Профиль</Button>
+                <Button variant={"outline-light"} href={FEED_ROUTE}>Лента</Button>
+                <Button variant={"outline-light"} href={SUB_ROUTE}>Поиск</Button>
+                <Button variant={"outline-light"}onClick={() => user.setIsAuth(false)} href={HOME_ROUTE}>Выход</Button>
               </Nav>
               :
               <Nav className="ml-auto">
