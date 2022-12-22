@@ -28,7 +28,6 @@ namespace Server.Models
                 .WithMany(x => x.Subber)
                 .HasForeignKey(x => x.UserId);
 
-
             modelBuilder.Entity<Subscriptions>()
                 .HasOne(x => x.SecondUser)
                 .WithMany(x => x.Sub)

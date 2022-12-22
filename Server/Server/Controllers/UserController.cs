@@ -39,12 +39,12 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        public ActionResult<int> Post([FromBody] User user)
+        public ActionResult<int> Post([FromBody] int code)
         {
 
             try
             {
-                return _userRepository.AddUser(user);
+                return _userRepository.AddUser(code).Result;
             }
             catch
             {
