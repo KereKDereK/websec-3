@@ -7,3 +7,8 @@
 /.vs/websec-3/v17
 /.vs
 /Server/Server/obj
+/node_modules
+/Client/.gitignore
+/Client/package-lock.json
+/Client/README.md
+/package-lock.json
