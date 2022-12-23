@@ -25,7 +25,7 @@ const NavBar = observer( () => {
               <Nav className="ml-auto">
                 <a href="https://oauth.yandex.ru/authorize?response_type=code&client_id=9ad6adf4562c48399e6da3cc61272b92">
                   <Button variant={"outline-light"}style={{color : 'white'}} onClick={() => user.setIsAuth(true)}>
-                    Войти с помощью яндекса
+                    Войти с помощью Яндекс
                   </Button>
                 </a> 
               </Nav>

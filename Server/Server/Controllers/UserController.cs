@@ -47,14 +47,14 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        public ActionResult<int> Post([FromBody] int code)
+        public ActionResult<int> Post([FromBody] Key code)
         {
 
             try
             {
                 string cookie = "string";
                 HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie);
-                Tuple<int, string> result = _userRepository.AddUser(code, cookie).Result;
+                Tuple<int, string> result = _userRepository.AddUser(code.code, cookie).Result;
                 if (result.Item1 == -1)
                     return -1;
                 HttpContext.Response.Cookies.Append("auth_token", result.Item2);
