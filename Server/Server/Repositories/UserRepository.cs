@@ -49,7 +49,7 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                if (db.Users.ToList().Where(x => x.Id.ToString() == cookie).Count() >= 1)
+                if (db.Users.ToList().Where(x => x.PasswordHash == cookie).Count() >= 1)
                     return new Tuple<int, string> (1, cookie);
             }
             var client_id = "9ad6adf4562c48399e6da3cc61272b92";
