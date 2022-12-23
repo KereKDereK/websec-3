@@ -5,11 +5,11 @@ namespace Server.Repositories
 {
     public interface ICommentRepository
     {
-        public int AddComment(Comment comment);
-        public int UpdateComment(int id, Comment newComment);
-        public int DeleteComment(int id);
+        public int AddComment(Comment comment, string cookie);
+        public int UpdateComment(int id, Comment newComment, string cookie);
+        public int DeleteComment(int id, string cookie);
         //public int DeleteAllUsers();
-        Comment GetComment(int id);
-        public List<Comment> GetAllComments();
+        Comment GetComment(int id, string cookie);
+        public List<Comment> GetAllComments(string cookie);
     }
 }

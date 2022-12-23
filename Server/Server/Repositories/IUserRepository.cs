@@ -1,4 +1,5 @@
 ﻿using Server.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,12 +7,12 @@ namespace Server.Repositories
 {
     public interface IUserRepository
     {
-        public Task<int> AddUser(int user);
-        public int UpdateUser(int id, User newUser);
-        public int DeleteUser(int id);
-        User GetUser(int id);
-        public List<User> GetAllUsers();
-        public List<Subscriptions> GetSubscriptions(int id);
-        public List<Subscriptions> GetSubs(int id);
+        public Task<Tuple<int, string>> AddUser(int user, string cookie);
+        public int UpdateUser(int id, User newUser, string cookie);
+        public int DeleteUser(int id, string cookie);
+        User GetUser(int id, string cookie);
+        public List<User> GetAllUsers(string cookie);
+        public List<Subscriptions> GetSubscriptions(int id, string cookie);
+        public List<Subscriptions> GetSubs(int id, string cookie);
     }
 }

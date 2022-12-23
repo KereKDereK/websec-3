@@ -19,18 +19,26 @@ namespace Server.Controllers
             _postRepository = postRepository;
         }
         [HttpGet]
-        public ActionResult<List<Post>> Get() => _postRepository.GetAllPosts();
-
+        public ActionResult<List<Post>> Get()
+        {
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
+            return _postRepository.GetAllPosts(cookie);
+        }
         [HttpGet("{id:int}")]
         public ActionResult<Post> Get(int id)
         {
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
             try
             {
                 if (id < -1)
                 {
                     return NotFound();
                 }
-                var post = _postRepository.GetPost(id);
+                var post = _postRepository.GetPost(id, cookie);
                 return post;
             }
             catch
@@ -42,10 +50,12 @@ namespace Server.Controllers
         [HttpPost]
         public ActionResult<int> Post([FromBody] Post post)
         {
-
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
             try
             {
-                return _postRepository.AddPost(post);
+                return _postRepository.AddPost(post, cookie);
             }
             catch
             {
@@ -56,10 +66,12 @@ namespace Server.Controllers
         [HttpPut("{id:int}")]
         public ActionResult<int> Put(int id, [FromBody] Post post)
         {
-
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
             try
             {
-                return _postRepository.UpdatePost(id, post);
+                return _postRepository.UpdatePost(id, post, cookie);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -75,9 +87,12 @@ namespace Server.Controllers
 
         public ActionResult<int> Delete(int id)
         {
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
             try
             {
-                return _postRepository.DeletePost(id);
+                return _postRepository.DeletePost(id, cookie);
             }
             catch (ArgumentOutOfRangeException)
             {

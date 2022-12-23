@@ -5,14 +5,14 @@ namespace Server.Repositories
 {
     public interface IPostRepository
     {
-        public int AddPost(Post post);
-        public int UpdatePost(int id, Post newPost);
-        public int DeletePost(int id);
+        public int AddPost(Post post, string cookie);
+        public int UpdatePost(int id, Post newPost, string cookie);
+        public int DeletePost(int id, string cookie);
         //public int DeleteAllUsers();
-        Post GetPost(int id);
-        public List<Post> GetAllPosts();
-        public int CountLikes(int id);
-        public List<Comment> GetPostComments(int id);
+        Post GetPost(int id, string cookie);
+        public List<Post> GetAllPosts(string cookie);
+        public int CountLikes(int id, string cookie);
+        public List<Comment> GetPostComments(int id, string cookie);
 
     }
 }

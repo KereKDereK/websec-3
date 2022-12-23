@@ -17,7 +17,7 @@ namespace Server.Repositories
 {
     public class UserRepository: IUserRepository
     {
-        public List<User> GetAllUsers()
+        public List<User> GetAllUsers(string cookie)
         {
             List<User> users;
             using (Models.ApplicationContext db = new Models.ApplicationContext())
@@ -27,8 +27,16 @@ namespace Server.Repositories
             return users;
         }
 
-        public User GetUser(int id)
+        public User GetUser(int id, string cookie)
         {
+            using (Models.ApplicationContext db = new Models.ApplicationContext())
+            {
+                var checker = db.Users.ToList().Where(x => x.Id.ToString() == cookie);
+                if (checker.Count() <= 0)
+                    throw new Exception("ex");
+                else if (checker.SingleOrDefault().Id != id)
+                    throw new Exception("ex");
+            }
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
                 var user = db.Users.Find(id);
@@ -36,8 +44,13 @@ namespace Server.Repositories
             }
         }
 
-        public async Task<int> AddUser(int user)
+        public async Task<Tuple<int, string>> AddUser(int user, string cookie)
         {
+            using (Models.ApplicationContext db = new Models.ApplicationContext())
+            {
+                if (db.Users.ToList().Where(x => x.Id.ToString() == cookie).Count() >= 1)
+                    return new Tuple<int, string> (1, cookie);
+            }
             var client_id = "9ad6adf4562c48399e6da3cc61272b92";
             var client_secret = "09a0e5e772f24177b672822239237660";
             var url = "https://oauth.yandex.ru/token";
@@ -65,7 +78,7 @@ namespace Server.Repositories
             }
             catch (Exception ex)
             {
-                return -1;
+                return new Tuple<int, string>(-1, "fail");
             }
 
 
@@ -85,11 +98,15 @@ namespace Server.Repositories
             }
             catch(Exception ex)
             {
-                return -1;
+                return new Tuple<int, string>(-1, "fail");
             }
 
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
+                var users = db.Users.ToList();
+                foreach (User u in users)
+                    if (u.Email == user_to_add.Email)
+                        return new Tuple<int, string>(1, u.Id.ToString());
                 db.Users.Add(user_to_add);
                 try
                 {
@@ -97,27 +114,27 @@ namespace Server.Repositories
                 }
                 catch (Exception ex)
                 {
-                    return -1;
+                    return new Tuple<int, string>(-1, "fail");
                 }
             }
-            return 1;
+            return new Tuple<int, string>(-1, "fail");
         }
 
-        public int UpdateUser(int id, User newUser)
+        public int UpdateUser(int id, User newUser, string cookie)
         {
-            try
+            using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                MailAddress checker = new MailAddress(newUser.Email);
+                var checker = db.Users.ToList().Where(x => x.Id.ToString() == cookie);
+                if (checker.Count() <= 0)
+                    throw new Exception("ex");
+                else if (checker.SingleOrDefault().Id != id)
+                    throw new Exception("ex");
             }
-            catch
-            {
-                return -1;
-            }
+
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
                 var user = db.Users.ToList().Where(x => x.Id == id).SingleOrDefault();
                 user.UserName = newUser.UserName;
-                user.Email = newUser.Email;
                 user.PasswordHash = newUser.PasswordHash;
                 try
                 {
@@ -131,8 +148,16 @@ namespace Server.Repositories
             return 1;
         }
 
-        public int DeleteUser(int id)
+        public int DeleteUser(int id, string cookie)
         {
+            using (Models.ApplicationContext db = new Models.ApplicationContext())
+            {
+                var checker = db.Users.ToList().Where(x => x.Id.ToString() == cookie);
+                if (checker.Count() <= 0)
+                    throw new Exception("ex");
+                else if (checker.SingleOrDefault().Id != id)
+                    throw new Exception("ex");
+            }
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
                 var user = db.Users.ToList().Where(x => x.Id == id).SingleOrDefault();
@@ -149,7 +174,7 @@ namespace Server.Repositories
             return 1;
         }
 
-        public List<Subscriptions> GetSubscriptions(int id)
+        public List<Subscriptions> GetSubscriptions(int id, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -157,7 +182,7 @@ namespace Server.Repositories
                 return user.Subber;
             }
         }
-        public List<Subscriptions> GetSubs(int id)
+        public List<Subscriptions> GetSubs(int id, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {

@@ -5,11 +5,11 @@ namespace Server.Repositories
 {
     public interface IImageRepository
     {
-        public int AddImage(Image image);
-        public int UpdateImage(int id, Image newImage);
-        public int DeleteImage(int id);
+        public int AddImage(Image image, string cookie);
+        public int UpdateImage(int id, Image newImage, string cookie);
+        public int DeleteImage(int id, string cookie);
         //public int DeleteAllUsers();
-        Image GetImage(int id);
-        public List<Image> GetAllImages();
+        Image GetImage(int id, string cookie);
+        public List<Image> GetAllImages(string cookie);
     }
 }

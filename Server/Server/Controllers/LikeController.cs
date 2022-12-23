@@ -19,18 +19,27 @@ namespace Server.Controllers
             _likeRepository = likeRepository;
         }
         [HttpGet]
-        public ActionResult<List<Like>> Get() => _likeRepository.GetAllLikes();
+        public ActionResult<List<Like>> Get()
+        {
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
+            return _likeRepository.GetAllLikes(cookie);
+        }
 
         [HttpGet("{id:int}")]
         public ActionResult<Like> Get(int id)
         {
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
             try
             {
                 if (id < -1)
                 {
                     return NotFound();
                 }
-                var like = _likeRepository.GetLike(id);
+                var like = _likeRepository.GetLike(id, cookie);
                 return like;
             }
             catch
@@ -42,10 +51,12 @@ namespace Server.Controllers
         [HttpPost]
         public ActionResult<int> Post([FromBody] Like like)
         {
-
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
             try
             {
-                return _likeRepository.AddLike(like);
+                return _likeRepository.AddLike(like, cookie);
             }
             catch
             {
@@ -58,9 +69,12 @@ namespace Server.Controllers
 
         public ActionResult<int> Delete(int id)
         {
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
             try
             {
-                return _likeRepository.DeleteLike(id);
+                return _likeRepository.DeleteLike(id, cookie);
             }
             catch (ArgumentOutOfRangeException)
             {

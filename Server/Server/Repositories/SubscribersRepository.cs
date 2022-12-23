@@ -8,7 +8,7 @@ namespace Server.Repositories
 {
     public class SubscribersRepository: ISubscribersRepository
     {
-        public List<Subscriptions> GetAllSubsribers()
+        public List<Subscriptions> GetAllSubsribers(string cookie)
         {
             List<Subscriptions> subs;
             using (Models.ApplicationContext db = new Models.ApplicationContext())
@@ -18,7 +18,7 @@ namespace Server.Repositories
             return subs;
         }
 
-        public Subscriptions GetSubsriber(int id)
+        public Subscriptions GetSubsriber(int id, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -27,7 +27,7 @@ namespace Server.Repositories
             }
         }
 
-        public int AddSubsriber(Subscriptions sub)
+        public int AddSubsriber(Subscriptions sub, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -48,7 +48,7 @@ namespace Server.Repositories
             return 1;
         }
 
-        public int DeleteSubsriber(int id)
+        public int DeleteSubsriber(int id, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {

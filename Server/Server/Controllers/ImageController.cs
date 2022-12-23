@@ -18,18 +18,26 @@ namespace Server.Controllers
             _imageRepository = imageRepository;
         }
         [HttpGet]
-        public ActionResult<List<Image>> Get() => _imageRepository.GetAllImages();
-
+        public ActionResult<List<Image>> Get()
+        {
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
+            return _imageRepository.GetAllImages(cookie);
+        }
         [HttpGet("{id:int}")]
         public ActionResult<Image> Get(int id)
         {
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
             try
             {
                 if (id < -1)
                 {
                     return NotFound();
                 }
-                var post = _imageRepository.GetImage(id);
+                var post = _imageRepository.GetImage(id, cookie);
                 return post;
             }
             catch
@@ -41,10 +49,12 @@ namespace Server.Controllers
         [HttpPost]
         public ActionResult<int> Post([FromBody] Image image)
         {
-
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
             try
             {
-                return _imageRepository.AddImage(image);
+                return _imageRepository.AddImage(image, cookie);
             }
             catch
             {
@@ -55,10 +65,12 @@ namespace Server.Controllers
         [HttpPut("{id:int}")]
         public ActionResult<int> Put(int id, [FromBody] Image image)
         {
-
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
             try
             {
-                return _imageRepository.UpdateImage(id, image);
+                return _imageRepository.UpdateImage(id, image, cookie);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -74,9 +86,12 @@ namespace Server.Controllers
 
         public ActionResult<int> Delete(int id)
         {
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
             try
             {
-                return _imageRepository.DeleteImage(id);
+                return _imageRepository.DeleteImage(id, cookie);
             }
             catch (ArgumentOutOfRangeException)
             {

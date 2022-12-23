@@ -8,7 +8,7 @@ namespace Server.Repositories
 {
     public class PostRepository: IPostRepository
     {
-        public List<Post> GetAllPosts()
+        public List<Post> GetAllPosts(string cookie)
         {
             List<Post> posts;
             using (Models.ApplicationContext db = new Models.ApplicationContext())
@@ -18,7 +18,7 @@ namespace Server.Repositories
             return posts;
         }
 
-        public Post GetPost(int id)
+        public Post GetPost(int id, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -27,7 +27,7 @@ namespace Server.Repositories
             }
         }
 
-        public int AddPost(Post post)
+        public int AddPost(Post post, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -46,7 +46,7 @@ namespace Server.Repositories
             return 1;
         }
 
-        public int UpdatePost(int id, Post newPost)
+        public int UpdatePost(int id, Post newPost, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -66,7 +66,7 @@ namespace Server.Repositories
             return 1;
         }
 
-        public int DeletePost(int id)
+        public int DeletePost(int id, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -83,7 +83,7 @@ namespace Server.Repositories
             }
             return 1;
         }
-        public int CountLikes(int id)
+        public int CountLikes(int id, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -92,7 +92,7 @@ namespace Server.Repositories
             }
         }
 
-        public List<Comment> GetPostComments(int id)
+        public List<Comment> GetPostComments(int id, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {

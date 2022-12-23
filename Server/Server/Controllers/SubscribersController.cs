@@ -18,18 +18,26 @@ namespace Server.Controllers
             _subscribersRepository = subscribersRepository;
         }
         [HttpGet]
-        public ActionResult<List<Subscriptions>> Get() => _subscribersRepository.GetAllSubsribers();
-
+        public ActionResult<List<Subscriptions>> Get()
+        { 
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
+            return _subscribersRepository.GetAllSubsribers(cookie);
+        }
         [HttpGet("{id:int}")]
         public ActionResult<Subscriptions> Get(int id)
         {
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
             try
             {
                 if (id < -1)
                 {
                     return NotFound();
                 }
-                var sub = _subscribersRepository.GetSubsriber(id);
+                var sub = _subscribersRepository.GetSubsriber(id, cookie);
                 return sub;
             }
             catch
@@ -41,10 +49,12 @@ namespace Server.Controllers
         [HttpPost]
         public ActionResult<int> Post([FromBody] Subscriptions subscriptions)
         {
-
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
             try
             {
-                return _subscribersRepository.AddSubsriber(subscriptions);
+                return _subscribersRepository.AddSubsriber(subscriptions, cookie);
             }
             catch
             {
@@ -57,9 +67,12 @@ namespace Server.Controllers
 
         public ActionResult<int> Delete(int id)
         {
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
             try
             {
-                return _subscribersRepository.DeleteSubsriber(id);
+                return _subscribersRepository.DeleteSubsriber(id, cookie);
             }
             catch (ArgumentOutOfRangeException)
             {

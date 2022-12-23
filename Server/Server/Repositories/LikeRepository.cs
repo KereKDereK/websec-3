@@ -7,7 +7,7 @@ namespace Server.Repositories
 {
     public class LikeRepository: ILikeRepository
     {
-        public List<Like> GetAllLikes()
+        public List<Like> GetAllLikes(string cookie)
         {
             List<Like> likes;
             using (Models.ApplicationContext db = new Models.ApplicationContext())
@@ -17,7 +17,7 @@ namespace Server.Repositories
             return likes;
         }
 
-        public Like GetLike(int id)
+        public Like GetLike(int id, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -26,7 +26,7 @@ namespace Server.Repositories
             }
         }
 
-        public int AddLike(Like like)
+        public int AddLike(Like like, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -49,7 +49,7 @@ namespace Server.Repositories
             return 1;
         }
 
-        public int DeleteLike(int id)
+        public int DeleteLike(int id, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {

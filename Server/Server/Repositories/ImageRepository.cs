@@ -7,7 +7,7 @@ namespace Server.Repositories
 {
     public class ImageRepository: IImageRepository
     {
-        public List<Image> GetAllImages()
+        public List<Image> GetAllImages(string cookie)
         {
             List<Image> images;
             using (Models.ApplicationContext db = new Models.ApplicationContext())
@@ -17,7 +17,7 @@ namespace Server.Repositories
             return images;
         }
 
-        public Image GetImage(int id)
+        public Image GetImage(int id, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -26,7 +26,7 @@ namespace Server.Repositories
             }
         }
 
-        public int AddImage(Image Image)
+        public int AddImage(Image Image, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -43,7 +43,7 @@ namespace Server.Repositories
             return 1;
         }
 
-        public int UpdateImage(int id, Image newImage)
+        public int UpdateImage(int id, Image newImage, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -62,7 +62,7 @@ namespace Server.Repositories
             return 1;
         }
 
-        public int DeleteImage(int id)
+        public int DeleteImage(int id, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {

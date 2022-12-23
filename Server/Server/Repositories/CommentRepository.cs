@@ -9,7 +9,7 @@ namespace Server.Repositories
     public class CommentRepository : ICommentRepository
     {
 
-        public List<Comment> GetAllComments()
+        public List<Comment> GetAllComments(string cookie)
         {
             List<Comment> comments;
             using (Models.ApplicationContext db = new Models.ApplicationContext())
@@ -19,7 +19,7 @@ namespace Server.Repositories
             return comments;
         }
 
-        public Comment GetComment(int id)
+        public Comment GetComment(int id, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -28,7 +28,7 @@ namespace Server.Repositories
             }
         }
 
-        public int AddComment(Comment comment)
+        public int AddComment(Comment comment, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -45,7 +45,7 @@ namespace Server.Repositories
             return 1;
         }
 
-        public int UpdateComment(int id, Comment newComment)
+        public int UpdateComment(int id, Comment newComment, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -64,7 +64,7 @@ namespace Server.Repositories
             return 1;
         }
 
-        public int DeleteComment(int id)
+        public int DeleteComment(int id, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {

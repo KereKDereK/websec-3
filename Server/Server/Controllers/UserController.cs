@@ -18,18 +18,26 @@ namespace Server.Controllers
             _userRepository = userRepository;
         }
         [HttpGet]
-        public ActionResult<List<User>> Get() => _userRepository.GetAllUsers();
-
+        public ActionResult<List<User>> Get()
+        {
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
+            return _userRepository.GetAllUsers(cookie);
+        }
         [HttpGet("{id:int}")]
         public ActionResult<User> Get(int id)
         {
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
             try
             {
                 if (id < -1)
                 {
                     return NotFound();
                 }
-                var user = _userRepository.GetUser(id);
+                var user = _userRepository.GetUser(id, cookie);
                 return user;
             }
             catch
@@ -44,7 +52,13 @@ namespace Server.Controllers
 
             try
             {
-                return _userRepository.AddUser(code).Result;
+                string cookie = "string";
+                HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie);
+                Tuple<int, string> result = _userRepository.AddUser(code, cookie).Result;
+                if (result.Item1 == -1)
+                    return -1;
+                HttpContext.Response.Cookies.Append("auth_token", result.Item2);
+                return 1;
             }
             catch
             {
@@ -55,10 +69,12 @@ namespace Server.Controllers
         [HttpPut("{id:int}")]
         public ActionResult<int> Put(int id, [FromBody] User user)
         {
-
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
             try
             {
-                return _userRepository.UpdateUser(id, user);
+                return _userRepository.UpdateUser(id, user, cookie);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -74,9 +90,12 @@ namespace Server.Controllers
 
         public ActionResult<int> Delete(int id)
         {
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
             try
             {
-                return _userRepository.DeleteUser(id);
+                return _userRepository.DeleteUser(id, cookie);
             }
             catch (ArgumentOutOfRangeException)
             {

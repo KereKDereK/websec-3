@@ -18,18 +18,26 @@ namespace Server.Controllers
             _commentRepository = commentRepository;
         }
         [HttpGet]
-        public ActionResult<List<Comment>> Get() => _commentRepository.GetAllComments();
-
+        public ActionResult<List<Comment>> Get()
+        {
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
+            return _commentRepository.GetAllComments(cookie);
+        }
         [HttpGet("{id:int}")]
         public ActionResult<Comment> Get(int id)
         {
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
             try
             {
                 if (id < -1)
                 {
                     return NotFound();
                 }
-                var comment = _commentRepository.GetComment(id);
+                var comment = _commentRepository.GetComment(id, cookie);
                 return comment;
             }
             catch
@@ -41,10 +49,12 @@ namespace Server.Controllers
         [HttpPost]
         public ActionResult<int> Post([FromBody] Comment comment)
         {
-
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
             try
             {
-                return _commentRepository.AddComment(comment);
+                return _commentRepository.AddComment(comment, cookie);
             }
             catch
             {
@@ -55,10 +65,12 @@ namespace Server.Controllers
         [HttpPut("{id:int}")]
         public ActionResult<int> Put(int id, [FromBody] Comment comment)
         {
-
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
             try
             {
-                return _commentRepository.UpdateComment(id, comment);
+                return _commentRepository.UpdateComment(id, comment, cookie);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -74,9 +86,12 @@ namespace Server.Controllers
 
         public ActionResult<int> Delete(int id)
         {
+            string cookie = "string";
+            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
+                return Problem();
             try
             {
-                return _commentRepository.DeleteComment(id);
+                return _commentRepository.DeleteComment(id, cookie);
             }
             catch (ArgumentOutOfRangeException)
             {
