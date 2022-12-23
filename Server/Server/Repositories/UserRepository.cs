@@ -32,15 +32,14 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var checker = db.Users.ToList().Where(x => x.Id.ToString() == cookie);
+                var checker = db.Users.ToList().Where(x => x.PasswordHash == cookie);
                 if (checker.Count() <= 0)
-                    throw new Exception("ex");
-                else if (checker.SingleOrDefault().Id != id)
                     throw new Exception("ex");
             }
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var user = db.Users.Find(id);
+                var user = db.Users.Include(u => u.Posts).ToList().Where(u => u.Id == id).SingleOrDefault();
+                user.PasswordHash = "secret";
                 return user;
             }
         }
@@ -138,10 +137,10 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var checker = db.Users.ToList().Where(x => x.Id.ToString() == cookie);
+                var checker = db.Users.ToList().Where(x => x.PasswordHash == cookie);
                 if (checker.Count() <= 0)
                     throw new Exception("ex");
-                else if (checker.SingleOrDefault().Id != id)
+                else if (checker.SingleOrDefault().Id != GetUser(id, cookie).Id)
                     throw new Exception("ex");
             }
 

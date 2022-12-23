@@ -31,8 +31,6 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                if (post.Likes_Count != 0)
-                    post.Likes_Count = 0;
                 db.Posts.Add(post);
                 try
                 {
