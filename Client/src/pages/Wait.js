@@ -5,9 +5,13 @@ import axios from "axios"
 import { useContext } from 'react'
 import { Context } from '../index';
 import {FEED_ROUTE } from "../utils/consts";
-import  Button  from "react-bootstrap/Button";
+import { observer } from 'mobx-react-lite';
+import Cookies from "universal-cookie"
 
-function Wait() {
+const cookies = new Cookies();
+
+
+function Wait () {
     const {user} = useContext(Context)
     axios.defaults.baseURL = 'https://localhost:5001';
     let [searchParams, setSearchParams] = useSearchParams()
@@ -18,7 +22,7 @@ function Wait() {
         {     
         axios.post('/api/User', {
         "code": Number(searchParams.get('code'))
-      })
+      }, { withCredentials: true })
       .then(function (response) {
         console.log(response);
         if (response.data == 1)
@@ -27,8 +31,8 @@ function Wait() {
         }
         user.isAuth?
         <div>                
-        ${window.location.href = FEED_ROUTE}
-      </div>
+        
+        </div>
           :
           <div className="d-flex justify-content-center">
           <Spinner animation="border"/>
@@ -39,4 +43,4 @@ function Wait() {
     )
 }
 
-export default Wait;
+export default observer(Wait);

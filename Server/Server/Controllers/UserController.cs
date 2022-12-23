@@ -57,7 +57,13 @@ namespace Server.Controllers
                 Tuple<int, string> result = _userRepository.AddUser(code.code, cookie).Result;
                 if (result.Item1 == -1)
                     return -1;
-                HttpContext.Response.Cookies.Append("auth_token", result.Item2);
+                HttpContext.Response.Cookies.Append("auth_token", result.Item2, 
+                    new Microsoft.AspNetCore.Http.CookieOptions
+                    {
+                    Expires = DateTimeOffset.Now.AddDays(10).AddMinutes(-5),
+                    SameSite = SameSiteMode.None,
+                    Secure = true
+                    });
                 return 1;
             }
             catch

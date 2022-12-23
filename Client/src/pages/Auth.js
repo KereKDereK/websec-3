@@ -51,4 +51,4 @@ function Auth() {
     )
 }
 
-export default Auth;
+export default observer(Auth);

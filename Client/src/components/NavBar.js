@@ -8,7 +8,7 @@ import {observer} from "mobx-react-lite";
 import { useContext } from 'react'
 import { Context } from '../index';
 
-const NavBar = observer( () => {
+function NavBar () {
   const {user} = useContext(Context)
   console.log(user)
     return (
@@ -33,6 +33,6 @@ const NavBar = observer( () => {
             }</Container>
       </Navbar>
     )
-})
+}
 
-export default NavBar;
+export default observer(NavBar);

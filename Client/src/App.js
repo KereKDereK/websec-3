@@ -2,17 +2,16 @@ import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import {authRoutes, publicRoutes} from './routes'
 import { useContext } from 'react'
-import { Context } from '.';
-import NavBar from './components/NavBar';
+import { Context } from './index';
+import { observer } from 'mobx-react-lite';
+import NavBar from './components/NavBar'
 
-function App() {
+function App () {
   const {user} = useContext(Context)
-
-  console.log(user)
   return (
     
     <div>
-
+    <NavBar/>
       <Routes>
             {user.isAuth && authRoutes.map(({path, Component}) =>
                 <Route key = {path} path={path} element={<Component/>}/>
@@ -25,4 +24,4 @@ function App() {
   );
 }
 
-export default App;
+export default observer(App);
