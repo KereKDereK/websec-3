@@ -1,6 +1,7 @@
 ﻿using Server.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Server.Repositories
@@ -21,7 +22,7 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var image = db.Images.Find(id);
+                var image = db.Images.ToList().Where(u => u.PostId == id).SingleOrDefault();
                 return image;
             }
         }
@@ -43,21 +44,34 @@ namespace Server.Repositories
             return 1;
         }
 
-        public int UpdateImage(int id, Image newImage, string cookie)
+        public int DownloadImage(FileForm image, int post_id, string cookie)
         {
+            var user = new User();
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var image = db.Images.ToList().Where(x => x.Id == id).SingleOrDefault();
-                image.ImageUrl = newImage.ImageUrl;
-                image.Order = newImage.Order;
-                try
+                user = db.Users.ToList().Where(u => u.PasswordHash == cookie).SingleOrDefault();
+            }
+            image.Name = user.Id.ToString() + "_" + DateTime.Today.ToString("Mddyyyyhhmmsstt") + ".jpg";
+            try
+            {
+                string path = Path.Combine(@"C:\Users\kerek\source\repos\websec-3\Server\Server\DbRepo\", image.Name);
+                using (Stream stream = new FileStream(path, FileMode.Create))
                 {
+                    image.file.CopyTo(stream);
+                }
+                var db_image = new Image { PostId = post_id, ImageUrl = path, Order = 1};
+                using (Models.ApplicationContext db = new Models.ApplicationContext())
+                {
+                    if (db.Images.ToList().Where(u => u.PostId == post_id).Count() >= 1)
+                        return -1;
+                    db.Images.Add(db_image);
                     db.SaveChanges();
                 }
-                catch (Exception ex)
-                {
-                    return -1;
-                }
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return -1;
             }
             return 1;
         }

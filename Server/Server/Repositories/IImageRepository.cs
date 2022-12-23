@@ -6,7 +6,7 @@ namespace Server.Repositories
     public interface IImageRepository
     {
         public int AddImage(Image image, string cookie);
-        public int UpdateImage(int id, Image newImage, string cookie);
+        public int DownloadImage(FileForm image, int post_id, string cookie);
         public int DeleteImage(int id, string cookie);
         //public int DeleteAllUsers();
         Image GetImage(int id, string cookie);

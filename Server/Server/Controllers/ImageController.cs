@@ -26,7 +26,7 @@ namespace Server.Controllers
             return _imageRepository.GetAllImages(cookie);
         }
         [HttpGet("{id:int}")]
-        public ActionResult<Image> Get(int id)
+        public ActionResult<string> Get(int id)
         {
             string cookie = "string";
             if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
@@ -37,7 +37,7 @@ namespace Server.Controllers
                 {
                     return NotFound();
                 }
-                var post = _imageRepository.GetImage(id, cookie);
+                var post = _imageRepository.GetImage(id, cookie).ImageUrl;
                 return post;
             }
             catch
@@ -47,30 +47,15 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        public ActionResult<int> Post([FromBody] Image image)
+        public ActionResult<int> Post(IFormFile image, int post_id)
         {
             string cookie = "string";
+            var newImage = new FileForm(image);
             if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
                 return Problem();
             try
             {
-                return _imageRepository.AddImage(image, cookie);
-            }
-            catch
-            {
-                return Problem();
-            }
-        }
-
-        [HttpPut("{id:int}")]
-        public ActionResult<int> Put(int id, [FromBody] Image image)
-        {
-            string cookie = "string";
-            if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
-                return Problem();
-            try
-            {
-                return _imageRepository.UpdateImage(id, image, cookie);
+                return _imageRepository.DownloadImage(newImage, post_id, cookie);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -80,6 +65,12 @@ namespace Server.Controllers
             {
                 return Problem();
             }
+        }
+
+        [HttpPut("{id:int}")]
+        public ActionResult<int> Put([FromBody] FileForm image)
+        {
+            return 0;
         }
 
         [HttpDelete("{id:int}")]
