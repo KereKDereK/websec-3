@@ -9,7 +9,7 @@ import { observer } from 'mobx-react-lite';
 import Cookies from "universal-cookie"
 
 const cookies = new Cookies();
-
+console.log(cookies.get("auth_token"))
 
 function Wait () {
     const {user} = useContext(Context)

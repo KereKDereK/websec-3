@@ -12,6 +12,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
+using System.Security.Cryptography;
 
 namespace Server.Repositories
 {
@@ -86,14 +87,14 @@ namespace Server.Repositories
             var response2 = await httpClient.GetStringAsync(url2);
             result = JsonSerializer.Deserialize<Dictionary<string, object>>(response2);
             User user_to_add = new User();
+            
             try
             { 
             user_to_add = new User
             {
                 Email = result["default_email"].ToString(),
                 UserName = result["real_name"].ToString(),
-                RegistrationType = "1",
-                PasswordHash = result["psuid"].ToString()
+                RegistrationType = "1"
             };
             }
             catch(Exception ex)
@@ -106,11 +107,24 @@ namespace Server.Repositories
                 var users = db.Users.ToList();
                 foreach (User u in users)
                     if (u.Email == user_to_add.Email)
-                        return new Tuple<int, string>(1, u.Id.ToString());
+                        return new Tuple<int, string>(1, u.PasswordHash);
+                var max = users.Max(u => u.Id) + 1;
+                string sSourceData;
+                byte[] tmpSource;
+                byte[] tmpHash;
+                sSourceData = max.ToString() + "-secret";
+
+                //Create a byte array from source data.
+                tmpSource = ASCIIEncoding.ASCII.GetBytes(sSourceData);
+                tmpHash = new MD5CryptoServiceProvider().ComputeHash(tmpSource);
+                string passwordHash = Convert.ToBase64String(tmpHash);
+                user_to_add.PasswordHash = passwordHash;
+
                 db.Users.Add(user_to_add);
                 try
                 {
                     db.SaveChanges();
+                    return new Tuple<int, string>(1, user_to_add.PasswordHash);
                 }
                 catch (Exception ex)
                 {
