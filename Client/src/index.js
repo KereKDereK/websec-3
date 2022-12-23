@@ -17,6 +17,7 @@ root.render(
     user: new UserAcc()
   }}>
     <BrowserRouter>
+    <NavBar/>
     <App />
     </BrowserRouter>
   </Context.Provider>

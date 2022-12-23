@@ -8,3 +8,4 @@
 /.vs
 /Server/Server/obj
 /node_modules
+/Client/node_modules
