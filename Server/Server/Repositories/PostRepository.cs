@@ -9,7 +9,7 @@ namespace Server.Repositories
 {
     public class PostRepository: IPostRepository
     {
-        public List<User> GetAllPosts(string cookie)
+        public List<Post> GetAllPosts(string cookie)
         {
             List<Post> posts = new List<Post>();
             List<User> userList = new List<User>();
@@ -27,24 +27,18 @@ namespace Server.Repositories
                     foreach (User u in userList)
                     {
                         tmp = db.Users.Include(us => us.Posts).ToList().Where(us => us.Id == u.Id).SingleOrDefault();
-                        List<Post> temp = new List<Post>();
                         foreach (Post p in tmp.Posts)
                         {
-                            temp.Add(db.Posts.Include(ps => ps.Comments).Include(ps => ps.Likes)
-                                .Include(ps => ps.Images).ToList().Where(ps => ps.Id == p.Id).SingleOrDefault());
+                            posts.Add(db.Posts.Include(ps => ps.Comments).Include(ps => ps.Likes).Include(ps => ps.Image).ToList().Where(ps => ps.Id == p.Id).SingleOrDefault());
                         }
-                        tmp.Posts = temp;
-                        tmp.PasswordHash = "secret";
-                        tmp.Email = "email";
-                        users.Add(tmp);
                     }
                 }
             }
             catch (Exception ex)
             {
-                return new List<User>();
+                return new List<Post>();
             }
-            return users;
+            return posts;
         }
 
         public Post GetPost(int id, string cookie)
@@ -60,6 +54,7 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
+                post.Name = db.Users.Find(post.UserId).UserName;
                 db.Posts.Add(post);
                 try
                 {
