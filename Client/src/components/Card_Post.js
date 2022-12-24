@@ -44,7 +44,7 @@ export default function Card_Post(resp) {
           rippleColor="light"
         >
           <img
-            src="../../Db/14_12242022085227.jpg"//resp.resp.image == null ? "C:/Users/kerek/source/repos/websec-3/Server/Server/DbRepo/14_12242022120000.jpg" : resp.resp.image.imageUrl}
+            src={resp.resp.image === null || "" ? process.env.PUBLIC_URL + "/images/bad.jpg" : process.env.PUBLIC_URL + "/images/" + resp.resp.image.imageUrl}
             className="w-100"
           />
           <a >

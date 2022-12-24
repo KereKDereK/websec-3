@@ -10,7 +10,7 @@ import { Context } from '../index';
 
 function NavBar () {
   const {user} = useContext(Context)
-  console.log(user)
+  //console.log(user)
     return (
       <Navbar bg="dark" variant="dark">
         <Container>          
