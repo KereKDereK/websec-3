@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Server.Repositories;
 
 namespace Server.Repositories
 {
@@ -10,10 +11,30 @@ namespace Server.Repositories
     {
         public List<Post> GetAllPosts(string cookie)
         {
-            List<Post> posts;
-            using (Models.ApplicationContext db = new Models.ApplicationContext())
+            List<Post> posts = new List<Post>();
+            List<User> userList = new List<User>();
+            List<Post> tmp = new List<Post>();
+            try
             {
-                posts = db.Posts.ToList();
+                using (Models.ApplicationContext db = new Models.ApplicationContext())
+                {
+                    if (db.Users.ToList().Where(x => x.PasswordHash == cookie).Count() <= 0)
+                        throw new Exception("ex");
+                    var userPosts = db.Users.Include(u => u.Subber).ToList().Where(x => x.PasswordHash == cookie).SingleOrDefault();
+                    foreach (Subscriptions s in userPosts.Subber)
+                        userList.Add(db.Users.ToList().Where(u => u.Id == s.SecondUserId).SingleOrDefault());
+                    foreach (User u in userList)
+                    {
+                        tmp = db.Users.Include(us => us.Posts).ToList().Where(us => us.Id == u.Id).SingleOrDefault().Posts;
+                        foreach (Post p in tmp)
+                            posts.Add(db.Posts.Include(ps => ps.Comments).Include(ps => ps.Likes)
+                                .Include(ps => ps.Images).ToList().Where(ps => ps.Id == p.Id).SingleOrDefault());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return new List<Post>();
             }
             return posts;
         }

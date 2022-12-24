@@ -30,17 +30,32 @@ namespace Server.Repositories
 
         public User GetUser(int id, string cookie)
         {
-            using (Models.ApplicationContext db = new Models.ApplicationContext())
+            try
             {
-                var checker = db.Users.ToList().Where(x => x.PasswordHash == cookie);
-                if (checker.Count() <= 0)
-                    throw new Exception("ex");
+                using (Models.ApplicationContext db = new Models.ApplicationContext())
+                {
+                    var checker = db.Users.ToList().Where(x => x.PasswordHash == cookie);
+                    if (checker.Count() <= 0)
+                        throw new Exception("ex");
+                }
+                List<Post> posts = new List<Post>();
+                using (Models.ApplicationContext db = new Models.ApplicationContext())
+                {
+                    var user = db.Users.Include(u => u.Posts).Include(u => u.Sub).ToList().Where(u => u.Id == id).SingleOrDefault();
+                    if (user == null)
+                        return new User();
+                    var tmp = user.Posts;
+                    foreach (Post p in tmp)
+                        posts.Add(db.Posts.Include(ps => ps.Comments).Include(ps => ps.Likes)
+                            .Include(ps => ps.Images).ToList().Where(ps => ps.Id == p.Id).SingleOrDefault());
+                    user.PasswordHash = "secret";
+                    user.Posts = posts;
+                    return user;
+                }
             }
-            using (Models.ApplicationContext db = new Models.ApplicationContext())
+            catch (Exception ex)
             {
-                var user = db.Users.Include(u => u.Posts).ToList().Where(u => u.Id == id).SingleOrDefault();
-                user.PasswordHash = "secret";
-                return user;
+                return new User();
             }
         }
 
