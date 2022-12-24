@@ -1,19 +1,27 @@
 import React from "react";
-import Post from '../components/Post';
-import { useContext } from 'react'
-import { Context } from '../index';
-import {observer} from "mobx-react-lite";
+import Card_Post from "../components/Card_Post"
+import axios from "axios"
+import {useState, useEffect} from "react"
 
-
-function Feed () {
-    const {user} = useContext(Context)
-    console.log(user)
+function Feed() {
+    const id = window.location.href.toString().split("/")[4]
+    axios.defaults.baseURL = 'https://localhost:5001';
+    const [state, setState] = useState();
+    useEffect (() => {
+        async function retrieveData() 
+        {
+            const response = await axios.get('/api/Post',{ withCredentials: true })
+            .then((response) => setState(response))
+            return response
+        }
+        retrieveData()
+    }, [])
+    console.log(state==undefined ? " " : state.data[0].text)
     return (
         <div>
-            Feed
-            <Post/>
+            <Card_Post/>
         </div>
     )
 }
 
-export default observer(Feed);
+export default Feed;
