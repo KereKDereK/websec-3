@@ -8,9 +8,13 @@ import {
   MDBRipple,
   MDBTextArea,
 } from "mdb-react-ui-kit";
+import { Context } from "..";
+import { useContext } from "react";
+import Card_Comment from "./Card_Comment_comp";
 
 
-export default function Card_Post() {
+export default function Card_Post(resp) {
+  console.log(resp.resp.image)
   return (
     <MDBContainer className="py-5">
       <MDBCard style={{ maxWidth: "42rem" }}>
@@ -18,7 +22,7 @@ export default function Card_Post() {
           <div className="d-flex mb-3">
             <div>
               <a href="#!" className="text-dark mb-0">
-                <strong>Имя запостившего</strong>
+                <strong>{resp.resp.name}</strong>
               </a>
               <a
                 href="#!"
@@ -30,7 +34,7 @@ export default function Card_Post() {
           </div>
           <div>
             <p>
-              Текст поста
+              {resp.resp.text}
             </p>
           </div>
         </MDBCardBody>
@@ -40,10 +44,10 @@ export default function Card_Post() {
           rippleColor="light"
         >
           <img
-            src="https://mdbcdn.b-cdn.net/img/new/standard/people/077.webp"
+            src="../../Db/14_12242022085227.jpg"//resp.resp.image == null ? "C:/Users/kerek/source/repos/websec-3/Server/Server/DbRepo/14_12242022120000.jpg" : resp.resp.image.imageUrl}
             className="w-100"
           />
-          <a href="#!">
+          <a >
             <div
               className="mask"
               style={{ backgroundColor: "rgba(251, 251, 251, 0.2)" }}
@@ -53,7 +57,7 @@ export default function Card_Post() {
         <MDBCardBody>
           <div className="d-flex justify-content-between mb-3">
             <div>
-              <a href="#!">
+              <a>
                 <MDBIcon
                   fas
                   icon="thumbs-up"
@@ -61,12 +65,12 @@ export default function Card_Post() {
                   className="me-1"
                 />
                 <MDBIcon fas icon="heart" color="danger" className="me-1" />
-                <span>Кол-во лайков</span>
+                <span>{resp.resp.likes_Count}</span>
               </a>
             </div>
             <div>
-              <a href="#!" className="text-muted">
-                Кол-во комментов
+              <a className="text-muted">
+              {resp.resp.comments.length}
               </a>
             </div>
           </div>
@@ -86,20 +90,11 @@ export default function Card_Post() {
               wrapperClass="w-100"
             />
           </div>
-          <div className="d-flex mb-3">
-            <div>
-              <div className="bg-light rounded-3 px-3 py-1">
-                <a href="#!" className="text-dark mb-0">
-                  <strong>Имя коментатора</strong>
-                </a>
-                <a href="#!" className="text-muted d-block">
-                  <small>
-                    комент
-                  </small>
-                </a>
-              </div>
-            </div>
-          </div>
+
+          {resp.resp.comments.map((x) => <Card_Comment key={x.id} props={x}/>)}
+
+
+
         </MDBCardBody>
       </MDBCard>
     </MDBContainer>

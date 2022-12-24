@@ -15,6 +15,7 @@ export const Context = createContext(null)
 root.render(
   <Context.Provider value = {{
     user: new UserAcc()
+
   }}>
     <BrowserRouter>
     <App />
