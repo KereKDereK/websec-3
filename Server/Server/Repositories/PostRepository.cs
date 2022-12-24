@@ -9,11 +9,12 @@ namespace Server.Repositories
 {
     public class PostRepository: IPostRepository
     {
-        public List<Post> GetAllPosts(string cookie)
+        public List<User> GetAllPosts(string cookie)
         {
             List<Post> posts = new List<Post>();
             List<User> userList = new List<User>();
-            List<Post> tmp = new List<Post>();
+            User tmp = new User();
+            List<User> users = new List<User>();
             try
             {
                 using (Models.ApplicationContext db = new Models.ApplicationContext())
@@ -25,18 +26,25 @@ namespace Server.Repositories
                         userList.Add(db.Users.ToList().Where(u => u.Id == s.SecondUserId).SingleOrDefault());
                     foreach (User u in userList)
                     {
-                        tmp = db.Users.Include(us => us.Posts).ToList().Where(us => us.Id == u.Id).SingleOrDefault().Posts;
-                        foreach (Post p in tmp)
-                            posts.Add(db.Posts.Include(ps => ps.Comments).Include(ps => ps.Likes)
+                        tmp = db.Users.Include(us => us.Posts).ToList().Where(us => us.Id == u.Id).SingleOrDefault();
+                        List<Post> temp = new List<Post>();
+                        foreach (Post p in tmp.Posts)
+                        {
+                            temp.Add(db.Posts.Include(ps => ps.Comments).Include(ps => ps.Likes)
                                 .Include(ps => ps.Images).ToList().Where(ps => ps.Id == p.Id).SingleOrDefault());
+                        }
+                        tmp.Posts = temp;
+                        tmp.PasswordHash = "secret";
+                        tmp.Email = "email";
+                        users.Add(tmp);
                     }
                 }
             }
             catch (Exception ex)
             {
-                return new List<Post>();
+                return new List<User>();
             }
-            return posts;
+            return users;
         }
 
         public Post GetPost(int id, string cookie)

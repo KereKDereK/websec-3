@@ -19,7 +19,7 @@ namespace Server.Controllers
             _postRepository = postRepository;
         }
         [HttpGet]
-        public ActionResult<List<Post>> Get()
+        public ActionResult<List<User>> Get()
         {
             string cookie = "string";
             if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
