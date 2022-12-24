@@ -46,8 +46,7 @@ namespace Server.Repositories
                         return new User();
                     var tmp = user.Posts;
                     foreach (Post p in tmp)
-                        posts.Add(db.Posts.Include(ps => ps.Comments).Include(ps => ps.Likes)
-                            .Include(ps => ps.Images).ToList().Where(ps => ps.Id == p.Id).SingleOrDefault());
+                        posts.Add(db.Posts.Include(ps => ps.Comments).Include(ps => ps.Likes).ToList().Where(ps => ps.Id == p.Id).SingleOrDefault());
                     user.PasswordHash = "secret";
                     user.Posts = posts;
                     return user;

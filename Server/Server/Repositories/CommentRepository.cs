@@ -32,6 +32,7 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
+                comment.Name = db.Users.Find(comment.UserId).UserName;
                 db.Comments.Add(comment);
                 try
                 {

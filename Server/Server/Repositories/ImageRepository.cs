@@ -51,15 +51,16 @@ namespace Server.Repositories
             {
                 user = db.Users.ToList().Where(u => u.PasswordHash == cookie).SingleOrDefault();
             }
-            image.Name = user.Id.ToString() + "_" + DateTime.Today.ToString("Mddyyyyhhmmsstt") + ".jpg";
+            image.Name = user.Id.ToString() + "_" + DateTime.Now.ToString("Mddyyyyhhmmsstt") + ".jpg";
             try
             {
-                string path = Path.Combine(@"C:\Users\kerek\source\repos\websec-3\Server\Server\DbRepo\", image.Name);
+                string pather = Path.GetRelativePath(AppDomain.CurrentDomain.BaseDirectory, "websec-3/Client/Db/");
+                string path = Path.Combine(pather, image.Name);
                 using (Stream stream = new FileStream(path, FileMode.Create))
                 {
                     image.file.CopyTo(stream);
                 }
-                var db_image = new Image { PostId = post_id, ImageUrl = path, Order = 1};
+                var db_image = new Image { PostId = post_id, ImageUrl = image.Name, Order = 1};
                 using (Models.ApplicationContext db = new Models.ApplicationContext())
                 {
                     if (db.Images.ToList().Where(u => u.PostId == post_id).Count() >= 1)
