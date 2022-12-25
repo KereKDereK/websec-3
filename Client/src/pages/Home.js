@@ -5,9 +5,11 @@ function Home() {
     let [searchParams, setSearchParams] = useSearchParams()
     searchParams.get("code")
     return (
-        <div>
-            HOME
+        <div className="mx-auto">
+            Стек: React + Bootstrap + MySQL + ASP.Net
+            <div>Для навигации по сайту воспользуйтесь выпадающим меню.</div>
         </div>
+        
     )
 }
 
