@@ -32,10 +32,13 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                comment.Name = db.Users.Find(comment.UserId).UserName;
-                db.Comments.Add(comment);
-                try
-                {
+                try 
+                { 
+                    var user = db.Users.ToList().Where(u => u.PasswordHash == cookie).SingleOrDefault();
+                    comment.Name = user.UserName;
+                    comment.UserId = user.Id;
+                    comment.Datetime = DateTime.Now;
+                    db.Comments.Add(comment);
                     db.SaveChanges();
                 }
                 catch (Exception ex)

@@ -26,7 +26,7 @@ namespace Server.Controllers
             return _userRepository.GetAllUsers(cookie);
         }
         [HttpGet("{id:int}")]
-        public ActionResult<User> Get(int id)
+        public ActionResult<List<Post>> Get(int id)
         {
             string cookie = "string";
             if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
@@ -38,7 +38,15 @@ namespace Server.Controllers
                     return NotFound();
                 }
                 var user = _userRepository.GetUser(id, cookie);
-                return user;
+                if (user.Item2 == 1)
+                    HttpContext.Response.Cookies.Append("id", user.Item1[0].UserId.ToString(),
+                    new Microsoft.AspNetCore.Http.CookieOptions
+                    {
+                        Expires = DateTimeOffset.Now.AddDays(10).AddMinutes(-5),
+                        SameSite = SameSiteMode.None,
+                        Secure = true
+                    });
+                return user.Item1;
             }
             catch
             {
@@ -64,6 +72,7 @@ namespace Server.Controllers
                     SameSite = SameSiteMode.None,
                     Secure = true
                     });
+                
                 return 1;
             }
             catch

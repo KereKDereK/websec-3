@@ -30,6 +30,7 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
+                like.UserId = db.Users.ToList().Where(u => u.PasswordHash == cookie).SingleOrDefault().Id;
                 var likes = db.Likes.ToList();
                 foreach (Like l in likes)
                     if (l.UserId == like.UserId && l.PostId == like.PostId)
@@ -53,7 +54,10 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var like = db.Likes.ToList().Where(x => x.Id == id).SingleOrDefault();
+                var userId = db.Users.ToList().Where(u => u.PasswordHash == cookie).SingleOrDefault().Id;
+                var post = db.Posts.Find(id);
+                post.Likes_Count = post.Likes_Count - 1;
+                var like = db.Likes.ToList().Where(x => x.UserId == userId && x.PostId == id).SingleOrDefault();
                 db.Likes.Remove(like);
                 try
                 {

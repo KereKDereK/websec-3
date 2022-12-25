@@ -28,33 +28,43 @@ namespace Server.Repositories
             return users;
         }
 
-        public User GetUser(int id, string cookie)
+        public Tuple<List<Post>, int> GetUser(int id, string cookie)
         {
+            List<Post> abo = new List<Post>();
             try
             {
+                var checker = new User();
                 using (Models.ApplicationContext db = new Models.ApplicationContext())
                 {
-                    var checker = db.Users.ToList().Where(x => x.PasswordHash == cookie);
-                    if (checker.Count() <= 0)
+                    try
+                    {
+                        checker = db.Users.ToList().Where(x => x.PasswordHash == cookie).SingleOrDefault();
+                    }
+                    catch (Exception ex)
+                    {
                         throw new Exception("ex");
+                    }
                 }
                 List<Post> posts = new List<Post>();
                 using (Models.ApplicationContext db = new Models.ApplicationContext())
                 {
                     var user = db.Users.Include(u => u.Posts).Include(u => u.Sub).ToList().Where(u => u.Id == id).SingleOrDefault();
                     if (user == null)
-                        return new User();
+                        return new Tuple<List<Post>, int>(abo, -1);
                     var tmp = user.Posts;
                     foreach (Post p in tmp)
-                        posts.Add(db.Posts.Include(ps => ps.Comments).Include(ps => ps.Likes).ToList().Where(ps => ps.Id == p.Id).SingleOrDefault());
+                        posts.Add(db.Posts.Include(ps => ps.Comments).Include(ps => ps.Likes).Include(ps => ps.Image).ToList().Where(ps => ps.Id == p.Id).SingleOrDefault());
                     user.PasswordHash = "secret";
                     user.Posts = posts;
-                    return user;
+                    if(checker.Id == id)
+                        return new Tuple<List<Post>, int>(user.Posts, 1);
+                    else
+                        return new Tuple<List<Post>, int>(user.Posts, 0);
                 }
             }
             catch (Exception ex)
             {
-                return new User();
+                return new Tuple<List<Post>, int>(abo, -1);
             }
         }
 
@@ -149,14 +159,14 @@ namespace Server.Repositories
 
         public int UpdateUser(int id, User newUser, string cookie)
         {
-            using (Models.ApplicationContext db = new Models.ApplicationContext())
+            /*using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
                 var checker = db.Users.ToList().Where(x => x.PasswordHash == cookie);
                 if (checker.Count() <= 0)
                     throw new Exception("ex");
                 else if (checker.SingleOrDefault().Id != GetUser(id, cookie).Id)
                     throw new Exception("ex");
-            }
+            }*/
 
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {

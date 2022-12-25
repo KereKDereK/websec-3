@@ -13,7 +13,15 @@ namespace Server.Repositories
             List<Subscriptions> subs;
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                subs = db.Subscriptions.ToList();
+                try
+                {
+                    var userId = db.Users.ToList().Where(x => x.PasswordHash == cookie).SingleOrDefault().Id;
+                    subs = db.Subscriptions.ToList().Where(x => x.UserId == userId).ToList();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception();
+                }
             }
             return subs;
         }
@@ -22,7 +30,8 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var subs = db.Subscriptions.Find(id);
+                var userId = db.Users.ToList().Where(x => x.PasswordHash == cookie).SingleOrDefault().Id;
+                var subs = db.Subscriptions.ToList().Where(u => u.UserId == userId && u.SecondUserId == id).SingleOrDefault();
                 return subs;
             }
         }
@@ -52,10 +61,12 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var sub = db.Subscriptions.ToList().Where(x => x.Id == id).SingleOrDefault();
-                db.Subscriptions.Remove(sub);
+                var us = db.Users.ToList().Where(_ => _.PasswordHash == cookie).SingleOrDefault().Id;
+                var sub = db.Subscriptions.ToList().Where(x => x.UserId == us && x.SecondUserId == id).SingleOrDefault();
+                
                 try
                 {
+                    db.Subscriptions.Remove(sub);
                     db.SaveChanges();
                 }
                 catch (Exception ex)

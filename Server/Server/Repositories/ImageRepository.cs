@@ -1,4 +1,5 @@
-﻿using Server.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Server.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -58,12 +59,25 @@ namespace Server.Repositories
                 string path = Path.Combine(pather, image.Name);
                 using (Stream stream = new FileStream(path, FileMode.Create))
                 {
-                    image.file.CopyTo(stream);
+                    try
+                    {
+                        image.file.CopyTo(stream);
+                    }
+                    catch (Exception ex)
+                    {
+                        return -1;
+                    }
                 }
-                var db_image = new Image { PostId = post_id, ImageUrl = image.Name, Order = 1};
+                int postId = 0;
                 using (Models.ApplicationContext db = new Models.ApplicationContext())
                 {
-                    if (db.Images.ToList().Where(u => u.PostId == post_id).Count() >= 1)
+                    var f = db.Users.Include(u => u.Posts).Where(u => u.Id == post_id).SingleOrDefault().Posts;
+                    postId = db.Users.Include(u => u.Posts).Where(u => u.Id == post_id).SingleOrDefault().Posts.Max(p => p.Id);
+                }
+                var db_image = new Image { PostId = postId, ImageUrl = image.Name, Order = 1};
+                using (Models.ApplicationContext db = new Models.ApplicationContext())
+                {
+                    if (db.Images.ToList().Where(u => u.PostId == postId).Count() >= 1)
                         return -1;
                     db.Images.Add(db_image);
                     db.SaveChanges();
