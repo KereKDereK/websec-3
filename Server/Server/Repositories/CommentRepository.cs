@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 
 namespace Server.Repositories
 {
@@ -11,24 +11,19 @@ namespace Server.Repositories
 
         public List<Comment> GetAllComments(string cookie)
         {
-            List<Comment> comments;
-            using (Models.ApplicationContext db = new Models.ApplicationContext())
-            {
-                comments = db.Comments.ToList();
-            }
-            return comments;
+            return new List<Comment>();
         }
 
-        public Comment GetComment(int id, string cookie)
+        public async Task<Comment> GetComment(int id, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var comment = db.Comments.Find(id);
+                var comment = await db.Comments.FindAsync(id);
                 return comment;
             }
         }
 
-        public int AddComment(Comment comment, string cookie)
+        public async Task<int> AddComment(Comment comment, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -39,7 +34,7 @@ namespace Server.Repositories
                     comment.UserId = user.Id;
                     comment.Datetime = DateTime.Now;
                     db.Comments.Add(comment);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {
@@ -49,7 +44,7 @@ namespace Server.Repositories
             return 1;
         }
 
-        public int UpdateComment(int id, Comment newComment, string cookie)
+        public async Task<int> UpdateComment(int id, Comment newComment, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -58,7 +53,7 @@ namespace Server.Repositories
                 comment.Datetime = newComment.Datetime;
                 try
                 {
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {
@@ -68,7 +63,7 @@ namespace Server.Repositories
             return 1;
         }
 
-        public int DeleteComment(int id, string cookie)
+        public async Task<int> DeleteComment(int id, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -76,7 +71,7 @@ namespace Server.Repositories
                 db.Comments.Remove(comment);
                 try
                 {
-                    db.SaveChangesAsync();
+                    await db.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {

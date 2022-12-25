@@ -55,7 +55,7 @@ namespace Server.Controllers
                 return Problem();
             try
             {
-                return _postRepository.AddPost(post, cookie);
+                return _postRepository.AddPost(post, cookie).Result;
             }
             catch
             {
@@ -71,7 +71,7 @@ namespace Server.Controllers
                 return Problem();
             try
             {
-                return _postRepository.UpdatePost(id, post, cookie);
+                return _postRepository.UpdatePost(id, post, cookie).Result;
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -92,7 +92,7 @@ namespace Server.Controllers
                 return Problem();
             try
             {
-                return _postRepository.DeletePost(id, cookie);
+                return _postRepository.DeletePost(id, cookie).Result;
             }
             catch (ArgumentOutOfRangeException)
             {

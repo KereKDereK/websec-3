@@ -39,7 +39,7 @@ namespace Server.Controllers
                 {
                     return NotFound();
                 }
-                var like = _likeRepository.GetLike(id, cookie);
+                var like = _likeRepository.GetLike(id, cookie).Result;
                 return like;
             }
             catch
@@ -56,7 +56,7 @@ namespace Server.Controllers
                 return Problem();
             try
             {
-                return _likeRepository.AddLike(like, cookie);
+                return _likeRepository.AddLike(like, cookie).Result;
             }
             catch
             {
@@ -74,7 +74,7 @@ namespace Server.Controllers
                 return Problem();
             try
             {
-                return _likeRepository.DeleteLike(id, cookie);
+                return _likeRepository.DeleteLike(id, cookie).Result;
             }
             catch (ArgumentOutOfRangeException)
             {

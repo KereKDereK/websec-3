@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Server.Models;
 
 namespace Server.Repositories
@@ -17,16 +18,16 @@ namespace Server.Repositories
             return likes;
         }
 
-        public Like GetLike(int id, string cookie)
+        public async Task<Like> GetLike(int id, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                var like = db.Likes.Find(id);
+                var like = await db.Likes.FindAsync(id);
                 return like;
             }
         }
 
-        public int AddLike(Like like, string cookie)
+        public async Task<int> AddLike(Like like, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -40,7 +41,7 @@ namespace Server.Repositories
                 change.Likes_Count = change.Likes_Count + 1;
                 try
                 {
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {
@@ -50,18 +51,18 @@ namespace Server.Repositories
             return 1;
         }
 
-        public int DeleteLike(int id, string cookie)
+        public async Task<int> DeleteLike(int id, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
                 var userId = db.Users.ToList().Where(u => u.PasswordHash == cookie).SingleOrDefault().Id;
-                var post = db.Posts.Find(id);
+                var post = await db.Posts.FindAsync(id);
                 post.Likes_Count = post.Likes_Count - 1;
                 var like = db.Likes.ToList().Where(x => x.UserId == userId && x.PostId == id).SingleOrDefault();
                 db.Likes.Remove(like);
                 try
                 {
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {

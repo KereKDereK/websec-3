@@ -77,7 +77,7 @@ namespace Server.Controllers
                 return Problem();
             try
             {
-                return _userRepository.UpdateUser(id, user, cookie);
+                return _userRepository.UpdateUser(id, user, cookie).Result;
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -98,7 +98,7 @@ namespace Server.Controllers
                 return Problem();
             try
             {
-                return _userRepository.DeleteUser(id, cookie);
+                return _userRepository.DeleteUser(id, cookie).Result;
             }
             catch (ArgumentOutOfRangeException)
             {

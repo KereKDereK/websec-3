@@ -54,7 +54,7 @@ namespace Server.Controllers
                 return Problem();
             try
             {
-                return _subscribersRepository.AddSubsriber(subscriptions, cookie);
+                return _subscribersRepository.AddSubsriber(subscriptions, cookie).Result;
             }
             catch
             {
@@ -72,7 +72,7 @@ namespace Server.Controllers
                 return Problem();
             try
             {
-                return _subscribersRepository.DeleteSubsriber(id, cookie);
+                return _subscribersRepository.DeleteSubsriber(id, cookie).Result;
             }
             catch (ArgumentOutOfRangeException)
             {

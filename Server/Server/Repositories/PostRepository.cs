@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Server.Repositories;
+using System.Threading.Tasks;
 
 namespace Server.Repositories
 {
@@ -93,7 +94,7 @@ namespace Server.Repositories
             }
         }
 
-        public int AddPost(Post post, string cookie)
+        public async Task<int> AddPost(Post post, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -101,8 +102,8 @@ namespace Server.Repositories
                 try
                 {
                     post.Name = db.Users.Find(post.UserId).UserName;
-                    db.Posts.Add(post);
-                    db.SaveChanges();
+                    await db.Posts.AddAsync(post);
+                    await db.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {
@@ -112,7 +113,7 @@ namespace Server.Repositories
             return 1;
         }
 
-        public int UpdatePost(int id, Post newPost, string cookie)
+        public async Task<int> UpdatePost(int id, Post newPost, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -122,7 +123,7 @@ namespace Server.Repositories
                 post.Datetime = newPost.Datetime;
                 try
                 {
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {
@@ -132,7 +133,7 @@ namespace Server.Repositories
             return 1;
         }
 
-        public int DeletePost(int id, string cookie)
+        public async Task<int> DeletePost(int id, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -140,7 +141,7 @@ namespace Server.Repositories
                 db.Posts.Remove(post);
                 try
                 {
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {

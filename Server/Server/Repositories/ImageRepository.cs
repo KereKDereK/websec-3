@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Server.Repositories
 {
@@ -45,7 +46,7 @@ namespace Server.Repositories
             return 1;
         }
 
-        public int DownloadImage(FileForm image, int post_id, string cookie)
+        public async Task<int> DownloadImage(FileForm image, int post_id, string cookie)
         {
             var user = new User();
             using (Models.ApplicationContext db = new Models.ApplicationContext())
@@ -61,7 +62,7 @@ namespace Server.Repositories
                 {
                     try
                     {
-                        image.file.CopyTo(stream);
+                        await image.file.CopyToAsync(stream);
                     }
                     catch (Exception ex)
                     {
@@ -78,8 +79,8 @@ namespace Server.Repositories
                 {
                     if (db.Images.ToList().Where(u => u.PostId == postId).Count() >= 1)
                         return -1;
-                    db.Images.Add(db_image);
-                    db.SaveChanges();
+                    await db.Images.AddAsync(db_image);
+                    await db.SaveChangesAsync();
                 }
                 return 1;
             }
@@ -90,7 +91,7 @@ namespace Server.Repositories
             return 1;
         }
 
-        public int DeleteImage(int id, string cookie)
+        public async Task<int> DeleteImage(int id, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -98,7 +99,7 @@ namespace Server.Repositories
                 db.Images.Remove(image);
                 try
                 {
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {
