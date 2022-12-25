@@ -38,14 +38,6 @@ namespace Server.Controllers
                     return NotFound();
                 }
                 var user = _userRepository.GetUser(id, cookie);
-                if (user.Item2 == 1)
-                    HttpContext.Response.Cookies.Append("id", user.Item1[0].UserId.ToString(),
-                    new Microsoft.AspNetCore.Http.CookieOptions
-                    {
-                        Expires = DateTimeOffset.Now.AddDays(10).AddMinutes(-5),
-                        SameSite = SameSiteMode.None,
-                        Secure = true
-                    });
                 return user.Item1;
             }
             catch
@@ -72,7 +64,15 @@ namespace Server.Controllers
                     SameSite = SameSiteMode.None,
                     Secure = true
                     });
-                
+
+                HttpContext.Response.Cookies.Append("id", result.Item1.ToString(),
+                    new Microsoft.AspNetCore.Http.CookieOptions
+                    {
+                        Expires = DateTimeOffset.Now.AddDays(10).AddMinutes(-5),
+                        SameSite = SameSiteMode.None,
+                        Secure = true
+                    });
+
                 return 1;
             }
             catch
