@@ -12,13 +12,13 @@ import {
 export default function Card_Comment(props){
     //console.log(props)
     return(
-      <div className="d-flex mb-3">
+      <div className="d-flex mt-3">
         <div>
           <div className="bg-light rounded-3 px-3 py-1">
-            <a href="#!" className="text-dark mb-0">
+            <a href={"/User/" + props.props.userId} className="text-dark mb-0">
               <strong>{props.props.name}</strong>
             </a>
-            <a href="#!" className="text-muted d-block">
+            <a className="text-muted d-block">
               <small>
                 {props.props.text}
               </small>

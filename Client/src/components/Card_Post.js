@@ -8,20 +8,61 @@ import {
   MDBRipple,
   MDBTextArea,
 } from "mdb-react-ui-kit";
-import { Context } from "..";
-import { useContext } from "react";
 import Card_Comment from "./Card_Comment_comp";
-
+import {useState, useEffect} from 'react'
+import axios from 'axios'
+import {Button} from "react-bootstrap"
 
 export default function Card_Post(resp) {
-  console.log(resp.resp.image)
+
+  const [message, setMessage] = useState('');
+  const [likes, setLikes] = useState(resp.resp.likes_Count);
+  const [state, setState] = useState(false);
+
+  const handleChange = event => {
+    setMessage(event.target.value);
+  };
+
+  const handleLike = event => {
+    
+    if (state == false)
+    {
+      setLikes(likes + 1)
+      axios.defaults.baseURL = 'https://localhost:5001';
+      axios.post("/api/Like", {
+      postId: resp.resp.id
+      }, { withCredentials: true })
+      setState(true)
+    }
+    else
+    {
+      setLikes(likes - 1)
+      axios.defaults.baseURL = 'https://localhost:5001';
+      axios.delete("/api/Like/" + resp.resp.id, { withCredentials: true })
+      setState(false)
+    }
+  };
+
+  const handleClick = () => {
+    if (message.length >= 1)
+    {
+      axios.defaults.baseURL = 'https://localhost:5001';
+      axios.post("/api/Comment", {
+        text: message,
+        userId: 1,
+        postId: resp.resp.id
+      }, { withCredentials: true })
+    }
+    window.location.reload(false);
+  }
+
   return (
     <MDBContainer className="py-5">
       <MDBCard style={{ maxWidth: "42rem" }}>
-        <MDBCardBody className="mx-auto">
-          <div className="d-flex mb-3">
+        <MDBCardBody className="mb-auto">
+          <div className="d-flex ml-2">
             <div>
-              <a href="#!" className="text-dark mb-0">
+              <a href={"/User/" + resp.resp.userId} className="text-dark mb-0">
                 <strong>{resp.resp.name}</strong>
               </a>
               <a
@@ -65,7 +106,7 @@ export default function Card_Post(resp) {
                   className="me-1"
                 />
                 <MDBIcon fas icon="heart" color="danger" className="me-1" />
-                <span>{resp.resp.likes_Count}</span>
+                <span>{likes}</span>
               </a>
             </div>
             <div>
@@ -75,21 +116,24 @@ export default function Card_Post(resp) {
             </div>
           </div>
           <div className="d-flex justify-content-between text-center border-top border-bottom mb-4">
-            <MDBBtn size="lg" rippleColor="dark" color="link">
-              <MDBIcon fas icon="thumbs-up" className="me-2" /> Like
-            </MDBBtn>
-            <MDBBtn size="lg" rippleColor="dark" color="link">
-              <MDBIcon fas icon="comment-alt" className="me-2" /> Comments
-            </MDBBtn>
+            <Button size="lg"  variant="danger" className="mr-auto" onClick={handleLike}>
+              Like
+            </Button> 
           </div>
           <div className="d-flex mb-3">
             <MDBTextArea
-              label="Message"
               id="textAreaExample"
               rows={2}
               wrapperClass="w-100"
+              value = {message}
+              onChange = {handleChange}
+              type="text"
             />
+            
           </div>
+          <Button  className="mb-auto" onClick={handleClick}>
+              Send
+            </Button> 
 
           {resp.resp.comments.map((x) => <Card_Comment key={x.id} props={x}/>)}
 

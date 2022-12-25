@@ -13,7 +13,7 @@ export const authRoutes = [
         Component: Feed
     },
     {
-        path: POST_ROUTE + '/:id',
+        path: POST_ROUTE,
         Component: Post
     },
     {
