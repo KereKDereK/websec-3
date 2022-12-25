@@ -6,8 +6,11 @@ import { observer } from "mobx-react-lite";
 const Feed = observer(()=> {
     axios.defaults.baseURL = 'https://localhost:5001';
     const [state, setState] = useState();
+    const [userId, setUserId] = useState(1)
     useEffect (() => {
-        axios.get('/api/Post',{ withCredentials: true })
+        axios.get('/api/User/1',{ withCredentials: true })
+        .then(response => setUserId(response.data));
+        axios.get('/api/Post?id=' + userId,{ withCredentials: true })
         .then(response => setState(response.data))
     }, [])
 

@@ -1,45 +1,35 @@
 import React from "react";
 import { redirect, useSearchParams } from "react-router-dom";
-import Spinner from 'react-bootstrap/Spinner';
+import Button from 'react-bootstrap/Button';
 import axios from "axios"
-import { useContext } from 'react'
+import { useContext, useEffect , useState} from 'react'
 import { Context } from '../index';
-import {FEED_ROUTE } from "../utils/consts";
+import {FEED_ROUTE, USER_ROUTE } from "../utils/consts";
 import { observer } from 'mobx-react-lite';
 import Cookies from "universal-cookie"
+import { Container } from "react-bootstrap";
 
 const cookies = new Cookies();
 console.log(cookies.get("auth_token"))
 
 function Wait () {
-    const {user} = useContext(Context)
-    axios.defaults.baseURL = 'https://localhost:5001';
     let [searchParams, setSearchParams] = useSearchParams()
-    searchParams.get("code")
-      console.log(user)
-    return (
-      <div>
-        {     
-        axios.post('/api/User', {
-        "code": Number(searchParams.get('code'))
-      }, { withCredentials: true })
-      .then(function (response) {
-        console.log(response);
-        if (response.data == 1)
-        {
-          user.setIsAuth(true)
-        }
-        user.isAuth?
-        <div>                
-        
-        </div>
-          :
-          <div className="d-flex justify-content-center">
-          <Spinner animation="border"/>
-        </div>
+    const [userId, setUserId] = useState(1);
+    useEffect(()=>{
+      axios.defaults.baseURL = 'https://localhost:5001';
+      axios.post('/api/User', {
+        code: Number(searchParams.get("code"))
       })
-      }
-      </div>
+      axios.get('/api/User/1', {withCredentials: true}).then(response => setUserId(response.data));
+    }, [])
+    return (
+      <Container className="mx-auto">
+            <div style={{display: 'flex', justifyContent: 'center'}}>
+            <Button color="danger"  href={FEED_ROUTE}>
+               Чтобы закончить аутентификацию, нажмите
+            </Button> 
+            </div>
+      </Container>
     )
 }
 

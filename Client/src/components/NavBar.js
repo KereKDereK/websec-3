@@ -3,24 +3,44 @@ import Nav  from "react-bootstrap/Nav";
 import Navbar  from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
 import { HOME_ROUTE,AUTH_ROUTE, REG_ROUTE, USER_ROUTE, FEED_ROUTE, SUB_ROUTE } from "../utils/consts";
-import  Button  from "react-bootstrap/Button";
+import  {Button, Dropdown, DropdownButton}  from "react-bootstrap";
 import {observer} from "mobx-react-lite";
-import { useContext } from 'react'
+import { useState, useEffect } from 'react'
 import { Context } from '../index';
+import Cookies from "universal-cookie"
+import axios from 'axios'
+
+const cookies = new Cookies();
 
 function NavBar () {
-  const {user} = useContext(Context)
-  //console.log(user)
+
+  const [auth, setAuth] = useState(false)
+  const [userId, setUserId] = useState(1)
+
+  useEffect(() => {
+    if (cookies.get("auth_token"))
+      setAuth(true)
+    axios.get('/api/User/1',{ withCredentials: true })
+    .then(response => setUserId(response.data));
+  }, [])
+  
+  const removeCookies = () => {
+    cookies.remove('auth_token', {path: '/', domain: "localhost"})
+    cookies.remove('id', {path: '/', domain: "localhost"})
+  }
+
     return (
       <Navbar bg="dark" variant="dark">
         <Container>          
           <Navbar.Brand href={HOME_ROUTE}>StoGramm</Navbar.Brand>
-            {user.isAuth?
+            {auth?
               <Nav className="ml-auto" style={{color : 'white'}}>
-                <Button variant={"outline-light"} href={USER_ROUTE}>Профиль</Button>
-                <Button variant={"outline-light"} href={FEED_ROUTE}>Лента</Button>
-                <Button variant={"outline-light"} href={SUB_ROUTE}>Поиск</Button>
-                <Button variant={"outline-light"} href={HOME_ROUTE}>Выход</Button>
+              <DropdownButton id="dropdown-basic-button" title="Menu">
+                <Dropdown.Item  variant={"outline-light"} className="mw-100" href={USER_ROUTE + "/" + userId}>Профиль</Dropdown.Item>
+                <Dropdown.Item variant={"outline-light"} className="mw-100" href={FEED_ROUTE}>Лента</Dropdown.Item>
+                <Dropdown.Item variant={"outline-light"} className="mw-100" href={SUB_ROUTE}>Поиск</Dropdown.Item>
+                <Dropdown.Item variant={"outline-light"} className="mw-100" onClick={removeCookies} href={HOME_ROUTE}>Выход</Dropdown.Item>
+              </DropdownButton>
               </Nav>
               :
               <Nav className="ml-auto">
