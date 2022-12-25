@@ -35,7 +35,7 @@ function NavBar () {
     return (
       <Navbar bg="dark" variant="dark">
         <Container>          
-          <Navbar.Brand href={HOME_ROUTE}>StoGramm</Navbar.Brand>
+          <Navbar.Brand>StoGramm</Navbar.Brand>
             {auth?
               <Nav className="ml-auto" style={{color : 'white'}}>
               <DropdownButton id="dropdown-basic-button" title="Menu">

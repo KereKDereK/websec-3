@@ -5,6 +5,7 @@ import axios from 'axios'
 import { Button } from "react-bootstrap";
 import { MDBTextArea } from "mdb-react-ui-kit";
 import Cookies from "universal-cookie"
+import { USER_ROUTE } from "../utils/consts";
 
 function Post() {
     axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
@@ -26,10 +27,7 @@ function Post() {
     const handleClick = () => {
         async function receiveData()
         {
-            const formData = new FormData();
-            formData.append("image", file);
-            await axios.post("/api/Image?post_id=" + userId, formData, 
-            {headers: {'Content-Type': "multipart/form-data"}, withCredentials: true })
+            
         }
 
         if (file.type == "image/jpeg")
@@ -39,7 +37,13 @@ function Post() {
             text: text,
             datetime: file.lastModifiedDate,
             likes_Count: 1
-        }, { withCredentials: true }).then()
+        }, { withCredentials: true }).then(() => {
+            const formData = new FormData();
+            formData.append("image", file);
+            axios.post("/api/Image?post_id=" + userId, formData, 
+            {headers: {'Content-Type': "multipart/form-data"}, withCredentials: true }).then(() => 
+            window.location.href = USER_ROUTE + "/" + userId)
+        })
 
         receiveData()
         setTimeout(function() {

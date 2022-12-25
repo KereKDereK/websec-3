@@ -34,7 +34,14 @@ namespace Server.Repositories
             {
                 using (Models.ApplicationContext db = new Models.ApplicationContext())
                 {
-                    return db.Users.ToList().Where(u => u.PasswordHash == cookie).SingleOrDefault().Id;
+                    try
+                    {
+                        return db.Users.ToList().Where(u => u.PasswordHash == cookie).SingleOrDefault().Id;
+                    }
+                    catch (Exception)
+                    {
+                        return -1;
+                    }
                 }
             }
             catch (Exception ex)

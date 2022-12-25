@@ -56,7 +56,7 @@ namespace Server.Repositories
             image.Name = user.Id.ToString() + "_" + DateTime.Now.ToString("Mddyyyyhhmmsstt") + ".jpg";
             try
             {
-                string pather = Path.GetRelativePath(AppDomain.CurrentDomain.BaseDirectory, "websec-33/Client/public/images/");
+                string pather = "..\\..\\" + "/Client/public/images/";
                 string path = Path.Combine(pather, image.Name);
                 using (Stream stream = new FileStream(path, FileMode.Create))
                 {
