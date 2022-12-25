@@ -23,7 +23,7 @@ function Subs() {
         setClone(data.filter(x => x.userName.toLowerCase().includes(state.toLowerCase())))
         setFlag(false)
     }
-
+    axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
     return (
         
         <Container>

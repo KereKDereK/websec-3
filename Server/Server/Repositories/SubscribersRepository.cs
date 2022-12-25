@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace Server.Repositories
 {
@@ -36,7 +37,7 @@ namespace Server.Repositories
             }
         }
 
-        public int AddSubsriber(Subscriptions sub, string cookie)
+        public async Task<int> AddSubsriber(Subscriptions sub, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -47,7 +48,7 @@ namespace Server.Repositories
                 db.Subscriptions.Add(sub);
                 try
                 {
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {
@@ -57,7 +58,7 @@ namespace Server.Repositories
             return 1;
         }
 
-        public int DeleteSubsriber(int id, string cookie)
+        public async Task<int> DeleteSubsriber(int id, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -67,7 +68,7 @@ namespace Server.Repositories
                 try
                 {
                     db.Subscriptions.Remove(sub);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {

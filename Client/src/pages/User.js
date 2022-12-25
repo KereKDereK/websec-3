@@ -15,6 +15,7 @@ import { Col, Container, Row, Button } from "react-bootstrap";
 import Cookies from "universal-cookie"
 
 const Feed = observer(()=> {
+    axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
     const id = window.location.href.toString().split("/")[4]
     axios.defaults.baseURL = 'https://localhost:5001';
     const [userId, setUserId] = useState(1);

@@ -16,7 +16,7 @@ function NavBar () {
 
   const [auth, setAuth] = useState(false)
   const [userId, setUserId] = useState(1)
-
+  axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
   useEffect(() => {
     if (cookies.get("auth_token") != undefined)
     {

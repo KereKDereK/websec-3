@@ -14,7 +14,7 @@ import axios from 'axios'
 import {Button} from "react-bootstrap"
 
 export default function Card_Post(resp) {
-
+  axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
   const [message, setMessage] = useState('');
   const [likes, setLikes] = useState(resp.resp.likes_Count);
   const [state, setState] = useState(false);

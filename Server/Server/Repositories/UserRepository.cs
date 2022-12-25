@@ -132,7 +132,7 @@ namespace Server.Repositories
             return new Tuple<int, string>(-1, "fail");
         }
 
-        public int UpdateUser(int id, User newUser, string cookie)
+        public async Task<int> UpdateUser(int id, User newUser, string cookie)
         {
             /*using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -150,7 +150,7 @@ namespace Server.Repositories
                 user.PasswordHash = newUser.PasswordHash;
                 try
                 {
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {
@@ -160,7 +160,7 @@ namespace Server.Repositories
             return 1;
         }
 
-        public int DeleteUser(int id, string cookie)
+        public async Task<int> DeleteUser(int id, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -176,7 +176,7 @@ namespace Server.Repositories
                 db.Users.Remove(user);
                 try
                 {
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {

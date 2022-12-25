@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Server.Repositories
 {
@@ -45,7 +46,7 @@ namespace Server.Repositories
             return 1;
         }
 
-        public int DownloadImage(FileForm image, int post_id, string cookie)
+        public async Task<int> DownloadImage(FileForm image, int post_id, string cookie)
         {
             var user = new User();
             using (Models.ApplicationContext db = new Models.ApplicationContext())
@@ -55,13 +56,13 @@ namespace Server.Repositories
             image.Name = user.Id.ToString() + "_" + DateTime.Now.ToString("Mddyyyyhhmmsstt") + ".jpg";
             try
             {
-                string pather = Path.GetRelativePath(AppDomain.CurrentDomain.BaseDirectory, "websec-33/Client/public/images");
+                string pather = Path.GetRelativePath(AppDomain.CurrentDomain.BaseDirectory, "websec-33/Client/public/images/");
                 string path = Path.Combine(pather, image.Name);
                 using (Stream stream = new FileStream(path, FileMode.Create))
                 {
                     try
                     {
-                        image.file.CopyTo(stream);
+                        await image.file.CopyToAsync(stream);
                     }
                     catch (Exception ex)
                     {
@@ -71,7 +72,6 @@ namespace Server.Repositories
                 int postId = 0;
                 using (Models.ApplicationContext db = new Models.ApplicationContext())
                 {
-                    var f = db.Users.Include(u => u.Posts).Where(u => u.Id == post_id).SingleOrDefault().Posts;
                     postId = db.Users.Include(u => u.Posts).Where(u => u.Id == post_id).SingleOrDefault().Posts.Max(p => p.Id);
                 }
                 var db_image = new Image { PostId = postId, ImageUrl = image.Name, Order = 1};
@@ -79,8 +79,8 @@ namespace Server.Repositories
                 {
                     if (db.Images.ToList().Where(u => u.PostId == postId).Count() >= 1)
                         return -1;
-                    db.Images.Add(db_image);
-                    db.SaveChanges();
+                    await db.Images.AddAsync(db_image);
+                    await db.SaveChangesAsync();
                 }
                 return 1;
             }
@@ -91,7 +91,7 @@ namespace Server.Repositories
             return 1;
         }
 
-        public int DeleteImage(int id, string cookie)
+        public async Task<int> DeleteImage(int id, string cookie)
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
@@ -99,7 +99,7 @@ namespace Server.Repositories
                 db.Images.Remove(image);
                 try
                 {
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {
