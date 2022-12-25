@@ -9,8 +9,8 @@ namespace Server.Repositories
         public int UpdatePost(int id, Post newPost, string cookie);
         public int DeletePost(int id, string cookie);
         //public int DeleteAllUsers();
-        Post GetPost(int id, string cookie);
-        public List<Post> GetAllPosts(string cookie);
+        List<Post> GetPost(int id, string cookie);
+        public List<Post> GetAllPosts(int id, string cookie);
         public int CountLikes(int id, string cookie);
         public List<Comment> GetPostComments(int id, string cookie);
 

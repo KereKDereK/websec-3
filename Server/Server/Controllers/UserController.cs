@@ -18,7 +18,7 @@ namespace Server.Controllers
             _userRepository = userRepository;
         }
         [HttpGet]
-        public ActionResult<List<User>> Get()
+        public ActionResult<List<User>> GetAll()
         {
             string cookie = "string";
             if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
@@ -26,19 +26,15 @@ namespace Server.Controllers
             return _userRepository.GetAllUsers(cookie);
         }
         [HttpGet("{id:int}")]
-        public ActionResult<List<Post>> Get(int id)
+        public ActionResult<int> Get()
         {
             string cookie = "string";
             if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
                 return Problem();
             try
             {
-                if (id < -1)
-                {
-                    return NotFound();
-                }
-                var user = _userRepository.GetUser(id, cookie);
-                return user.Item1;
+                var user = _userRepository.GetUser(cookie);
+                return user;
             }
             catch
             {
@@ -63,14 +59,6 @@ namespace Server.Controllers
                     Expires = DateTimeOffset.Now.AddDays(10).AddMinutes(-5),
                     SameSite = SameSiteMode.None,
                     Secure = true
-                    });
-
-                HttpContext.Response.Cookies.Append("id", result.Item1.ToString(),
-                    new Microsoft.AspNetCore.Http.CookieOptions
-                    {
-                        Expires = DateTimeOffset.Now.AddDays(10).AddMinutes(-5),
-                        SameSite = SameSiteMode.None,
-                        Secure = true
                     });
 
                 return 1;

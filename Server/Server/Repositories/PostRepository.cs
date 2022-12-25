@@ -9,7 +9,7 @@ namespace Server.Repositories
 {
     public class PostRepository: IPostRepository
     {
-        public List<Post> GetAllPosts(string cookie)
+        public List<Post> GetAllPosts(int id, string cookie)
         {
             List<Post> posts = new List<Post>();
             List<User> userList = new List<User>();
@@ -19,6 +19,8 @@ namespace Server.Repositories
             {
                 using (Models.ApplicationContext db = new Models.ApplicationContext())
                 {
+                    try
+                    {
                     if (db.Users.ToList().Where(x => x.PasswordHash == cookie).Count() <= 0)
                         throw new Exception("ex");
                     var userPosts = db.Users.Include(u => u.Subber).ToList().Where(x => x.PasswordHash == cookie).SingleOrDefault();
@@ -32,6 +34,11 @@ namespace Server.Repositories
                             posts.Add(db.Posts.Include(ps => ps.Comments).Include(ps => ps.Likes).Include(ps => ps.Image).ToList().Where(ps => ps.Id == p.Id).SingleOrDefault());
                         }
                     }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception();
+                    }
                 }
             }
             catch (Exception ex)
@@ -41,12 +48,48 @@ namespace Server.Repositories
             return posts;
         }
 
-        public Post GetPost(int id, string cookie)
+        public List<Post> GetPost(int id, string cookie)
         {
-            using (Models.ApplicationContext db = new Models.ApplicationContext())
+            List<Post> abo = new List<Post>();
+            try
             {
-                var post = db.Posts.Find(id);
-                return post;
+                var checker = new User();
+                using (Models.ApplicationContext db = new Models.ApplicationContext())
+                {
+                    try
+                    {
+                        checker = db.Users.ToList().Where(x => x.PasswordHash == cookie).SingleOrDefault();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("ex");
+                    }
+                }
+                List<Post> posts = new List<Post>();
+                using (Models.ApplicationContext db = new Models.ApplicationContext())
+                {
+                    try
+                    {
+                        var user = db.Users.Include(u => u.Posts).Include(u => u.Sub).ToList().Where(u => u.Id == id).SingleOrDefault();
+                        if (user == null)
+                            return new List<Post>();
+                        var tmp = user.Posts;
+                        foreach (Post p in tmp)
+                            posts.Add(db.Posts.Include(ps => ps.Comments).Include(ps => ps.Likes).Include(ps => ps.Image).ToList().Where(ps => ps.Id == p.Id).SingleOrDefault());
+
+                        user.PasswordHash = "secret";
+                        user.Posts = posts;
+                        return new List<Post> (user.Posts);
+                    }
+                    catch (Exception ex)
+                    {
+                        return new List<Post>();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return new List<Post>();
             }
         }
 
@@ -54,10 +97,11 @@ namespace Server.Repositories
         {
             using (Models.ApplicationContext db = new Models.ApplicationContext())
             {
-                post.Name = db.Users.Find(post.UserId).UserName;
-                db.Posts.Add(post);
+                
                 try
                 {
+                    post.Name = db.Users.Find(post.UserId).UserName;
+                    db.Posts.Add(post);
                     db.SaveChanges();
                 }
                 catch (Exception ex)

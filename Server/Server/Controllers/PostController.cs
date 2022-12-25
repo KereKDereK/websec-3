@@ -19,15 +19,15 @@ namespace Server.Controllers
             _postRepository = postRepository;
         }
         [HttpGet]
-        public ActionResult<List<Post>> Get()
+        public ActionResult<List<Post>> GetAll(int id)
         {
             string cookie = "string";
             if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
                 return Problem();
-            return _postRepository.GetAllPosts(cookie);
+            return _postRepository.GetAllPosts(id, cookie);
         }
         [HttpGet("{id:int}")]
-        public ActionResult<Post> Get(int id)
+        public ActionResult<List<Post>> Get(int id)
         {
             string cookie = "string";
             if (HttpContext.Request.Cookies.TryGetValue("auth_token", out cookie) == false)
