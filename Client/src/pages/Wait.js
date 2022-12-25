@@ -20,7 +20,6 @@ function Wait () {
       axios.post('/api/User', {
         code: Number(searchParams.get("code"))
       })
-      axios.get('/api/User/1', {withCredentials: true}).then(response => setUserId(response.data));
     }, [])
     return (
       <Container className="mx-auto">
