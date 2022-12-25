@@ -18,6 +18,7 @@ function NavBar () {
   const [userId, setUserId] = useState(1)
 
   useEffect(() => {
+    axios.defaults.baseURL = 'https://localhost:5001';
     if (cookies.get("auth_token"))
       setAuth(true)
     axios.get('/api/User/1',{ withCredentials: true })
