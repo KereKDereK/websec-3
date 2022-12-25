@@ -16,15 +16,13 @@ function NavBar () {
 
   const [auth, setAuth] = useState(false)
   const [userId, setUserId] = useState(1)
-  axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+
   useEffect(() => {
-    if (cookies.get("auth_token") != undefined)
-    {
-      axios.defaults.baseURL = 'https://localhost:5001';
+    axios.defaults.baseURL = 'https://localhost:5001';
+    if (cookies.get("auth_token"))
       setAuth(true)
-      axios.get('/api/User/1',{ withCredentials: true })
-      .then(response => setUserId(response.data));
-    }
+    axios.get('/api/User/1',{ withCredentials: true })
+    .then(response => setUserId(response.data));
   }, [])
   
   const removeCookies = () => {
@@ -35,7 +33,7 @@ function NavBar () {
     return (
       <Navbar bg="dark" variant="dark">
         <Container>          
-          <Navbar.Brand href={HOME_ROUTE}>StoGramm</Navbar.Brand>
+          <Navbar.Brand>StoGramm</Navbar.Brand>
             {auth?
               <Nav className="ml-auto" style={{color : 'white'}}>
               <DropdownButton id="dropdown-basic-button" title="Menu">
