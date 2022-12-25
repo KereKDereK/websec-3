@@ -2,17 +2,27 @@
 # 1.	База Данных
 -	Скачать и установть MySQL workbench + server
 -	Скачать dump базы данных, расположенный по пути: Server/ StoGramm.sql
--	Создать пользователя с username – student и паролем – P@ssw0rd и правами администратора.
-    1.	В MySQL Workbench выбрать пункт Database -> Connect to database
+-	## Создать пользователя с username – student и паролем – P@ssw0rd и правами администратора.
+    1) Зайти в пункт Server -> Users and Privileges
+    ![image](https://user-images.githubusercontent.com/75019623/209462580-09a93377-a9f0-451e-9d94-b98efe731bc3.png)
+    2) Нажать на Add Acount
+    ![image](https://user-images.githubusercontent.com/75019623/209462600-6515a661-c0c3-4232-a406-6e498bdcf5fc.png)
+    3) Ввести имя пользователя и пароль
+    4) Перейти во вкладку Administrative Roles и выставить флаг DBA
+    ![image](https://user-images.githubusercontent.com/75019623/209462653-176a97c2-9623-42aa-bd40-53032c631644.png)
+
+    5) Нажать кнопку Apply
+    
+ 1.	В MySQL Workbench выбрать пункт Database -> Connect to database
     ![image](https://user-images.githubusercontent.com/75019623/209459340-0f38de15-ccc4-4646-b46b-6337668f9bbd.png)
 
-    2.	После подключения выбрать пункт Server -> Data Import
+ 2.	После подключения выбрать пункт Server -> Data Import
     ![image](https://user-images.githubusercontent.com/75019623/209459363-7cd6aaa9-b61d-4045-9a33-86fcc5ccc0df.png)
 
-    3.	Выбрать Import from Self-Contained File
+ 3.	Выбрать Import from Self-Contained File
     ![image](https://user-images.githubusercontent.com/75019623/209459373-abe3d39b-eb37-4d70-9c46-09ba4a03d1df.png)
 
-    4.	Нажать на Start Import и открыть полученную схему
+ 4.	Нажать на Start Import и открыть полученную схему
     
 # 2.	Server
 -	Скачать и установить Visual Studio
