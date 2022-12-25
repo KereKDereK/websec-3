@@ -5,16 +5,18 @@ import axios from 'axios'
 import { Button } from "react-bootstrap";
 import { MDBTextArea } from "mdb-react-ui-kit";
 import Cookies from "universal-cookie"
+import { USER_ROUTE } from "../utils/consts";
+
+const cookies = new Cookies();
 
 function Post() {
-    axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
     const [file, setFile] = useState();
     const [text, setText] = useState('');
     const [userId, setUserId] = useState(1);
 
     useEffect(() => {
         axios.defaults.baseURL = 'https://localhost:5001';
-        axios.get('/api/User/1', { withCredentials: true })
+        axios.get('/api/User/1',{ withCredentials: true })
         .then(response => setUserId(response.data));
     }, [])
 
@@ -24,28 +26,30 @@ function Post() {
         console.log(file)
       };
     const handleClick = () => {
+
+
         async function receiveData()
         {
             const formData = new FormData();
             formData.append("image", file);
-            await axios.post("/api/Image?post_id=" + userId, formData, 
-            {headers: {'Content-Type': "multipart/form-data"}, withCredentials: true })
+            await axios.post("/api/Image?post_id=" + userId, formData, {headers: {'Content-Type': "multipart/form-data"}}, { withCredentials: true })
+
         }
 
-        if (file.type == "image/jpeg")
-    {
+        if (file.type != "image/jpeg")
+            console.log("Invalid data")
+
         axios.post("/api/Post", {
             userId: userId,
             text: text,
             datetime: file.lastModifiedDate,
             likes_Count: 1
-        }, { withCredentials: true }).then()
+        }, { withCredentials: true })
 
         receiveData()
         setTimeout(function() {
             setText("Успешно")
         }, 2);
-    }
 
         
     };
