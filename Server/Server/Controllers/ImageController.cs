@@ -55,7 +55,7 @@ namespace Server.Controllers
                 return Problem();
             try
             {
-                return _imageRepository.DownloadImage(newImage, post_id, cookie);
+                return _imageRepository.DownloadImage(newImage, post_id, cookie).Result;
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -82,7 +82,7 @@ namespace Server.Controllers
                 return Problem();
             try
             {
-                return _imageRepository.DeleteImage(id, cookie);
+                return _imageRepository.DeleteImage(id, cookie).Result;
             }
             catch (ArgumentOutOfRangeException)
             {

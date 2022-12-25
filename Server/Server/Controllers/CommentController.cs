@@ -37,7 +37,7 @@ namespace Server.Controllers
                 {
                     return NotFound();
                 }
-                var comment = _commentRepository.GetComment(id, cookie);
+                var comment = _commentRepository.GetComment(id, cookie).Result;
                 return comment;
             }
             catch
@@ -54,7 +54,7 @@ namespace Server.Controllers
                 return Problem();
             try
             {
-                return _commentRepository.AddComment(comment, cookie);
+                return _commentRepository.AddComment(comment, cookie).Result;
             }
             catch
             {
@@ -70,7 +70,7 @@ namespace Server.Controllers
                 return Problem();
             try
             {
-                return _commentRepository.UpdateComment(id, comment, cookie);
+                return _commentRepository.UpdateComment(id, comment, cookie).Result;
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -91,7 +91,7 @@ namespace Server.Controllers
                 return Problem();
             try
             {
-                return _commentRepository.DeleteComment(id, cookie);
+                return _commentRepository.DeleteComment(id, cookie).Result;
             }
             catch (ArgumentOutOfRangeException)
             {

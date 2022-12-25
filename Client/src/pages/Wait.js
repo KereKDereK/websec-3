@@ -13,14 +13,14 @@ const cookies = new Cookies();
 console.log(cookies.get("auth_token"))
 
 function Wait () {
+    axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
     let [searchParams, setSearchParams] = useSearchParams()
     const [userId, setUserId] = useState(1);
     useEffect(()=>{
       axios.defaults.baseURL = 'https://localhost:5001';
       axios.post('/api/User', {
         code: Number(searchParams.get("code"))
-      })
-      axios.get('/api/User/1', {withCredentials: true}).then(response => setUserId(response.data));
+      }, {withCredentials: true})
     }, [])
     return (
       <Container className="mx-auto">
