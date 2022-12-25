@@ -8,14 +8,13 @@ import Cookies from "universal-cookie"
 import { USER_ROUTE } from "../utils/consts";
 
 function Post() {
-    axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
     const [file, setFile] = useState();
     const [text, setText] = useState('');
     const [userId, setUserId] = useState(1);
 
     useEffect(() => {
         axios.defaults.baseURL = 'https://localhost:5001';
-        axios.get('/api/User/1', { withCredentials: true })
+        axios.get('/api/User/1',{ withCredentials: true })
         .then(response => setUserId(response.data));
     }, [])
 
@@ -25,13 +24,16 @@ function Post() {
         console.log(file)
       };
     const handleClick = () => {
+
+
         async function receiveData()
         {
             
         }
 
-        if (file.type == "image/jpeg")
-    {
+        if (file.type != "image/jpeg")
+            console.log("Invalid data")
+
         axios.post("/api/Post", {
             userId: userId,
             text: text,
@@ -49,7 +51,6 @@ function Post() {
         setTimeout(function() {
             setText("Успешно")
         }, 2);
-    }
 
         
     };
