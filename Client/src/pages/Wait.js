@@ -13,6 +13,7 @@ const cookies = new Cookies();
 console.log(cookies.get("auth_token"))
 
 function Wait () {
+    axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
     let [searchParams, setSearchParams] = useSearchParams()
     const [userId, setUserId] = useState(1);
     useEffect(()=>{

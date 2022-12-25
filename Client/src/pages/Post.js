@@ -10,6 +10,7 @@ import { USER_ROUTE } from "../utils/consts";
 const cookies = new Cookies();
 
 function Post() {
+    axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
     const [file, setFile] = useState();
     const [text, setText] = useState('');
     const [userId, setUserId] = useState(1);
