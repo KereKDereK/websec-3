@@ -55,7 +55,7 @@ namespace Server.Repositories
             image.Name = user.Id.ToString() + "_" + DateTime.Now.ToString("Mddyyyyhhmmsstt") + ".jpg";
             try
             {
-                string pather = Path.GetRelativePath(AppDomain.CurrentDomain.BaseDirectory, "websec-33/Client/public/images");
+                string pather = Path.GetRelativePath(AppDomain.CurrentDomain.BaseDirectory, "websec-33/Client/public/images/");
                 string path = Path.Combine(pather, image.Name);
                 using (Stream stream = new FileStream(path, FileMode.Create))
                 {
@@ -71,7 +71,6 @@ namespace Server.Repositories
                 int postId = 0;
                 using (Models.ApplicationContext db = new Models.ApplicationContext())
                 {
-                    var f = db.Users.Include(u => u.Posts).Where(u => u.Id == post_id).SingleOrDefault().Posts;
                     postId = db.Users.Include(u => u.Posts).Where(u => u.Id == post_id).SingleOrDefault().Posts.Max(p => p.Id);
                 }
                 var db_image = new Image { PostId = postId, ImageUrl = image.Name, Order = 1};

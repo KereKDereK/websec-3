@@ -20,7 +20,7 @@ function Wait () {
       axios.defaults.baseURL = 'https://localhost:5001';
       axios.post('/api/User', {
         code: Number(searchParams.get("code"))
-      })
+      }, {withCredentials: true})
     }, [])
     return (
       <Container className="mx-auto">
