@@ -17,13 +17,17 @@ function NavBar () {
   const [auth, setAuth] = useState(false)
   const [userId, setUserId] = useState(1)
 
-  useEffect(() => {
-    axios.defaults.baseURL = 'https://localhost:5001';
-    if (cookies.get("auth_token"))
-      setAuth(true)
+  axios.defaults.baseURL = 'https://localhost:5001';
     axios.get('/api/User/1',{ withCredentials: true })
-    .then(response => setUserId(response.data));
-  }, [])
+    .then(response => 
+      {
+        setUserId(response.data);
+        setAuth(true)
+      })
+    .catch( error => 
+      {
+        setAuth(false)
+      });
   
   const removeCookies = () => {
     cookies.remove('auth_token', {path: '/', domain: "localhost"})
