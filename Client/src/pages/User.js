@@ -22,13 +22,12 @@ const Feed = observer(()=> {
     const [state, setState] = useState();
     const [statesub, setStateSub] = useState();
     useEffect (() => {
-        axios.get('/api/User/'+id,{ withCredentials: true })
+        axios.get('/api/User/'+id, { withCredentials: true })
         .then(response => setUserId(response.data));
         axios.get('/api/Post/'+id,{ withCredentials: true })
         .then(response => setState(response.data));
         axios.get('/api/Subscribers/' + id,{ withCredentials: true })
         .then(response => setStateSub(response.data));
-        console.log(userId)
     }, [])
 
 const clickHandlerSub = () =>
@@ -36,7 +35,7 @@ const clickHandlerSub = () =>
     axios.post('/api/Subscribers', {
         userId: userId,
         secondUserId: id
-    },{ withCredentials: true })
+    }, { withCredentials: true })
     setTimeout(function() {
         window.location.reload(false);
     }, 500);
@@ -44,7 +43,7 @@ const clickHandlerSub = () =>
 
 const clickHandlerUnsub = () =>
 {
-    axios.delete('/api/Subscribers/' + id ,{ withCredentials: true })
+    axios.delete('/api/Subscribers/' + id , { withCredentials: true })
     setTimeout(function() {
         window.location.reload(false);
     }, 500);

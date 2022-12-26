@@ -16,7 +16,6 @@ function Subs() {
 
     const changeHandler = event => {
         setState(event.target.value)
-        console.log(state)
     }
 
     const clickHandler = () => {
@@ -35,7 +34,6 @@ function Subs() {
                 aria-describedby="basic-addon2"
                 
                 />
-                {data == undefined ? " " : console.log(data)}
                 <Button variant="outline-secondary" id="button-addon2" onClick={clickHandler}>
                 Search
                 </Button>

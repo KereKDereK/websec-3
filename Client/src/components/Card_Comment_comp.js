@@ -10,7 +10,6 @@ import {
   } from "mdb-react-ui-kit";
 
 export default function Card_Comment(props){
-    //console.log(props)
     return(
       <div className="d-flex mt-3">
         <div>
