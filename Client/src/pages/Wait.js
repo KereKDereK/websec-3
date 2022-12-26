@@ -10,24 +10,25 @@ import Cookies from "universal-cookie"
 import { Container } from "react-bootstrap";
 
 const cookies = new Cookies();
-console.log(cookies.get("auth_token"))
 
 function Wait () {
     axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
     let [searchParams, setSearchParams] = useSearchParams()
-    const [userId, setUserId] = useState(1);
+    const [userId, setUserId] = useState();
     useEffect(()=>{
       axios.defaults.baseURL = 'https://localhost:5001';
       axios.post('/api/User', {
         code: Number(searchParams.get("code"))
       }, {withCredentials: true})
+      .then( response => 
+        {
+          window.location.href = FEED_ROUTE
+        })
     }, [])
     return (
       <Container className="mx-auto">
             <div style={{display: 'flex', justifyContent: 'center'}}>
-            <Button color="danger"  href={FEED_ROUTE}>
-               Чтобы закончить аутентификацию, нажмите
-            </Button> 
+            Подождите, идет авторизация
             </div>
       </Container>
     )

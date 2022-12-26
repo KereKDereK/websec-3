@@ -20,8 +20,6 @@ function Post() {
 
     const handleChange = event => {
         setText(event.target.value);
-        console.log(text)
-        console.log(file)
       };
     const handleClick = () => {
 
